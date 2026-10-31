@@ -11,13 +11,16 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import knowledge, storage, tutor
+from . import knowledge, llm, storage, tutor
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
 app = FastAPI(title="Guided Learning Agent — 现电 · 三极管放大电路")
 
 storage.init_db()
+
+print(f"[gla] teacher LLM: {'ON (' + llm.MODEL + ')' if llm.enabled() else 'OFFLINE — no key read'}"
+      f" | .env present: {llm.ENV_PATH.exists()} | key configured: {bool(llm.API_KEY)}")
 
 
 class StartSession(BaseModel):
@@ -35,6 +38,17 @@ class AnswerIn(BaseModel):
 class ChatIn(BaseModel):
     student: str = Field(min_length=1, max_length=40)
     message: str = Field(min_length=1, max_length=2000)
+
+
+@app.get("/api/status")
+def status():
+    # Diagnostics expose booleans only — never the key itself.
+    return {
+        "llm_enabled": llm.enabled(),
+        "llm_model": llm.MODEL if llm.enabled() else None,
+        "env_file_present": llm.ENV_PATH.exists(),
+        "key_configured": bool(llm.API_KEY),
+    }
 
 
 @app.get("/api/courses")

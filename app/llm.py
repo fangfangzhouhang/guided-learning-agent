@@ -15,6 +15,8 @@ import os
 import urllib.request
 from pathlib import Path
 
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+
 
 def _load_dotenv() -> None:
     """Load project-root .env into the environment (real env vars win).
@@ -23,10 +25,9 @@ def _load_dotenv() -> None:
     LLM_API_KEY, run the app — no shell exports needed. The .env file is
     gitignored and must never be committed.
     """
-    env_path = Path(__file__).resolve().parent.parent / ".env"
-    if not env_path.exists():
+    if not ENV_PATH.exists():
         return
-    for line in env_path.read_text(encoding="utf-8").splitlines():
+    for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue

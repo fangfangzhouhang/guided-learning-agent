@@ -3,75 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>引导式学习 Agent · 现电 · 三极管放大电路</title>
+<title>引导学习 Agent · 现电</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<header>
-  <h1>引导式学习 Agent</h1>
-  <p class="sub">现电 · 三极管放大电路 — 一位有耐心、懂你的老师，一步步带你学</p>
-  <label class="student-box">我是 <input id="student" value="ark" maxlength="40"></label>
-</header>
-<nav id="tabs">
-  <button data-tab="learn" class="tab active">课程学习</button>
-  <button data-tab="chat" class="tab">问老师</button>
-  <button data-tab="profile" class="tab">我的画像</button>
-</nav>
-
-<section id="tab-learn" class="tabpage">
-  <main>
-    <aside id="map">
-      <h2>知识地图</h2>
-      <div id="concepts"></div>
-      <div id="recommend" class="recommend hidden"></div>
-    </aside>
-    <section id="panel">
-      <div id="chatlog"></div>
-      <div id="question-box" class="hidden">
-        <div class="q-head"><span id="stage-label"></span>
-          <label class="conf">答题前信心：
-            <select id="confidence">
-              <option value="">不填</option>
-              <option value="1">1 完全没把握</option>
-              <option value="2">2 有点没底</option>
-              <option value="3">3 一般</option>
-              <option value="4">4 比较有把握</option>
-              <option value="5">5 非常确定</option>
-            </select>
-          </label>
-        </div>
-        <p id="question-text"></p>
-        <div id="options"></div>
-        <div id="text-answer" class="hidden">
-          <input id="numeric-input" class="hidden" type="text" inputmode="decimal" placeholder="输入数值">
-          <textarea id="explain-input" class="hidden" rows="3" placeholder="用自己的话写下你的思路…"></textarea>
-          <span id="unit-label"></span>
-          <button id="submit-text" type="button">提交</button>
-        </div>
-        <div class="q-actions">
-          <button id="hint-btn" type="button">给我一个提示</button>
-          <span id="hint-note" class="muted"></span>
-        </div>
-        <div id="hint-box" class="hidden"></div>
-      </div>
-      <div id="empty" class="muted">← 在左边选择一个知识点，开始一次引导学习。</div>
-    </section>
-  </main>
-</section>
-
-<section id="tab-chat" class="tabpage hidden">
-  <div id="teacher-chat"></div>
-  <div class="chat-input-row">
-    <input id="teacher-input" type="text" placeholder="有什么不懂的，问老师…（例如：为什么 Re 能稳定工作点？）">
-    <button id="teacher-send" type="button">发送</button>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="logo">🧭 引导学习 Agent<small>现代电子学实验 · 三极管放大电路</small></div>
+    <span class="statuspill" id="statusPill">AI 老师：检测中…</span>
+    <nav class="mainnav">
+      <a href="#/course" data-nav="course">课程</a>
+      <a href="#/chat" data-nav="chat">问老师</a>
+      <a href="#/profile" data-nav="profile">我的画像</a>
+    </nav>
   </div>
-  <p class="muted">老师会先引导你想一步，不会直接把答案甩给你。她记得你反复错的地方。</p>
-</section>
+  <div class="namebar">
+    <span>我叫</span><input id="student" value="ark" maxlength="40">
+    <span>换个名字 = 换一份学习记录；进度保存在这台服务器上。</span>
+  </div>
+</header>
 
-<section id="tab-profile" class="tabpage hidden">
-  <div id="profile-box" class="muted">正在加载你的学习画像…</div>
-</section>
+<main>
+  <!-- 课程页 -->
+  <section class="view" id="view-course">
+    <div class="hero">
+      <h1 id="courseTitle">三极管放大电路</h1>
+      <p>规矩不变：先诊断、再引导练习、最后无提示独立测验——测验过了才算真掌握。不直接给答案，是为了让你真的学会。</p>
+      <div class="bar"><i id="courseBar" style="width:0%"></i></div>
+      <div class="bar-meta" id="courseBarMeta">正在读取进度…</div>
+    </div>
+    <div class="nexttip" id="nextTip" style="display:none"></div>
+    <div class="concept-grid" id="conceptGrid"></div>
+  </section>
 
+  <!-- 学习页 -->
+  <section class="view" id="view-study">
+    <div class="crumb"><a href="#/course">← 返回课程</a></div>
+    <div class="study-head">
+      <h2 id="studyTitle">知识点</h2>
+      <p id="studyGoal"></p>
+      <div class="steps" id="stageSteps">
+        <span data-stage="diagnose">1 · 摸底诊断</span>
+        <span data-stage="guided">2 · 引导练习</span>
+        <span data-stage="test">3 · 独立测验</span>
+      </div>
+    </div>
+    <div class="qcard" id="qcard"></div>
+  </section>
+
+  <!-- 问老师页 -->
+  <section class="view" id="view-chat">
+    <div class="diag" id="chatDiag" style="display:none"></div>
+    <div class="chatwrap">
+      <div class="chatlog" id="chatlog"></div>
+      <div class="chatbar">
+        <input id="chatin" placeholder="有问题直接问，比如：为什么 Re 能稳定工作点？">
+        <button class="btn" id="chatsend">发送</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 我的画像页 -->
+  <section class="view" id="view-profile">
+    <div id="profileBody"><p class="empty">正在读取…</p></div>
+  </section>
+</main>
+
+<footer>教学决策全部由可解释的规则引擎完成并留痕；大模型只在自由提问和开放题判读时参与。学习记录仅保存在本地服务器。</footer>
 <script src="/static/app.js"></script>
 </body>
 </html>

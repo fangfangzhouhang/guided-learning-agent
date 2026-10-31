@@ -1,5 +1,12 @@
 # 引导式学习 Agent · 现电 · 三极管放大电路
 
+> **Guided Learning Agent** — an open-source AI tutor that teaches step by
+> step instead of handing out answers. It diagnoses the exact misconception
+> behind a wrong answer, gives layered hints and worked demonstrations, and
+> only marks a topic as *mastered* when the student passes an independent,
+> hint-free variant test. Ships with a full course pack for BJT transistor
+> amplifier circuits; new courses are data files, not code changes.
+
 一位有耐心、懂你的 AI 老师：不直接给答案，而是按
 **诊断 → 引导/示范 → 练习 → 独立测验** 的闭环一步步带着学。
 只有独立测验（无提示）通过，才判定为真正掌握；答错会定位到具体的
@@ -33,6 +40,18 @@ uvicorn app.main:app --reload
 ```bash
 pip install pytest && python -m pytest -q
 ```
+
+或者用 Docker 一键运行：
+
+```bash
+docker build -t gla .
+docker run -p 8000:8000 -e LLM_API_KEY=<你的DeepSeek密钥> gla
+```
+
+不传 `LLM_API_KEY` 时为离线模式：课程学习闭环完整可用，「问老师」
+切换为基于知识库的引导模式。贡献方式见 `CONTRIBUTING.md`，
+团队学习路径见 `docs/learning-path.md`，开源路线见
+`docs/roadmap-opensource.md`。本项目以 MIT 协议开源（见 `LICENSE`）。
 
 ## 已实现功能（对应产品要求）
 

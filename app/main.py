@@ -37,9 +37,15 @@ class ChatIn(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
 
 
+@app.get("/api/courses")
+def courses():
+    return {"courses": knowledge.list_courses()}
+
+
 @app.get("/api/course")
 def course():
-    return knowledge.COURSE | {"concepts": knowledge.list_concepts()}
+    return knowledge.COURSE | {"concepts": knowledge.list_concepts(),
+                                "courses": knowledge.list_courses()}
 
 
 @app.get("/api/progress/{student}")

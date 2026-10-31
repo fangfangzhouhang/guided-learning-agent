@@ -10,13 +10,34 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-CONTENT_PATH = Path(__file__).resolve().parent.parent / "content" / "bjt.json"
+CONTENT_DIR = Path(__file__).resolve().parent.parent / "content"
 
-with CONTENT_PATH.open(encoding="utf-8") as fh:
-    _DATA = json.load(fh)
+# Course-pack architecture: every content/*.json file is one course pack
+# with the same schema (course + concepts). Drop a new pack into content/
+# and it becomes available without touching code — this is how the project
+# grows from one chapter to a full course, and how contributors add courses.
+COURSES: dict[str, dict] = {}
+CONCEPTS: dict[str, dict] = {}
+for _path in sorted(CONTENT_DIR.glob("*.json")):
+    with _path.open(encoding="utf-8") as fh:
+        _data = json.load(fh)
+    COURSES[_data["course"]["id"]] = _data["course"]
+    for _c in _data["concepts"]:
+        CONCEPTS[_c["id"]] = _c
+    if "concepts" not in COURSES[_data["course"]["id"]]:
+        COURSES[_data["course"]["id"]]["concepts"] = _data["concepts"]
 
-COURSE = _DATA["course"]
-CONCEPTS: dict[str, dict] = {c["id"]: c for c in _DATA["concepts"]}
+_DEFAULT_ID = next(iter(COURSES))
+COURSE = COURSES[_DEFAULT_ID]
+_DATA = {"course": COURSE, "concepts": COURSE["concepts"]}
+
+
+def list_courses() -> list[dict]:
+    return [
+        {"id": c["id"], "title": c["title"], "description": c["description"],
+         "concept_count": len(c["concepts"])}
+        for c in COURSES.values()
+    ]
 
 
 def list_concepts() -> list[dict]:

@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+      - name: Run tests (offline mode, no LLM key needed)
+        run: python -m pytest -q
+      - name: Validate course packs
+        run: |
+          python - <<'EOF'
+          import json, pathlib
+          for p in pathlib.Path("content").glob("*.json"):
+              d = json.loads(p.read_text(encoding="utf-8"))
+              assert d["course"]["id"] and d["concepts"], p
+              for c in d["concepts"]:
+                  for stage in ("diagnose", "guided", "test"):
+                      assert c["questions"][stage], (p, c["id"], stage)
+                  for q in sum(c["questions"].values(), []):
+                      assert q["id"] and q["prompt"] and q["explanation"], (p, q)
+          print("course packs OK")
+          EOF

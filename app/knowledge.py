@@ -40,17 +40,29 @@ def get_concept(concept_id: str) -> dict | None:
     return CONCEPTS.get(concept_id)
 
 
-def get_question(concept_id: str, stage: str) -> dict | None:
+def get_question(concept_id: str, stage: str, index: int = 0) -> dict | None:
     concept = CONCEPTS.get(concept_id)
     if not concept:
         return None
-    return concept["questions"].get(stage)
+    pool = concept["questions"].get(stage) or []
+    if index < 0 or index >= len(pool):
+        return None
+    return pool[index]
+
+
+def stage_size(concept_id: str, stage: str) -> int:
+    concept = CONCEPTS.get(concept_id)
+    if not concept:
+        return 0
+    return len(concept["questions"].get(stage) or [])
 
 
 def public_question(question: dict) -> dict:
-    """Strip correctness/misconception data before sending to the client."""
-    return {
-        "id": question["id"],
-        "prompt": question["prompt"],
-        "options": [opt["text"] for opt in question["options"]],
-    }
+    """Strip answers/rubrics before sending to the client."""
+    qtype = question.get("type", "mcq")
+    out = {"id": question["id"], "type": qtype, "prompt": question["prompt"]}
+    if qtype == "mcq":
+        out["options"] = [opt["text"] for opt in question["options"]]
+    elif qtype == "numeric":
+        out["unit"] = question.get("unit", "")
+    return out

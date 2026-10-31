@@ -1,1 +1,1020 @@
-{"concepts":[{"id":"bjt_basics","key_points":["放大条件：发射结正偏、集电结反偏","iC = β·iB，iE = iB + iC = (1+β)·iB","三种工作状态：放大、饱和、截止"],"misconceptions":{"state_confusion":"混淆放大、饱和、截止三种状态的偏置条件","voltage_amplifier_myth":"把三极管理解成直接放大电压，忽略它本质是电流控制电流"},"prerequisites":[],"questions":{"diagnose":{"demonstration":"示范：三极管在放大区是一个电流控制器件。iB=20μA 是输入的小电流，β=50 表示放大倍数，所以 iC = 50 × 20μA = 1000μA = 1mA。注意：起控制作用的是 iB，不是某个电压直接被放大。","explanation":"放大区 iC = β·iB = 50 × 20μA = 1mA。","hint1":"想一想放大区里 iC 和 iB 之间是什么关系？哪个量控制哪个量？","hint2":"放大区：iC = β·iB。把 β=50、iB=20μA 代进去算一算。","id":"basics_d1","options":[{"correct":true,"text":"1mA"},{"correct":false,"misconception":"voltage_amplifier_myth","text":"20μA，集电极电流和基极电流一样大"},{"correct":false,"misconception":"state_confusion","text":"无法判断，要先知道集电极电压"}],"prompt":"某 NPN 三极管工作时测得 iB = 20μA，β = 50。若它工作在放大区，iC 约为多少？"},"guided":{"demonstration":"示范：记住口诀——放大：发正集反；饱和：发正集正；截止：发反。先判断发射结，再判断集电结。","explanation":"放大区条件：发射结正偏、集电结反偏。","hint1":"发射结负责把载流子发出去，它需要导通还是截止？","hint2":"发射结正偏才能发射载流子；集电结反偏才能把载流子收集过去。两个都正偏是饱和，发射结反偏是截止。","id":"basics_g1","options":[{"correct":true,"text":"发射结正偏，集电结反偏"},{"correct":false,"misconception":"state_confusion","text":"发射结正偏，集电结正偏"},{"correct":false,"misconception":"state_confusion","text":"发射结反偏，集电结反偏"}],"prompt":"要让 NPN 三极管工作在放大区，两个 PN 结的偏置应该是？"},"test":{"explanation":"VBE = 0.7V 发射结正偏；VC > VB 集电结反偏，所以是放大区。","id":"basics_t1","options":[{"correct":true,"text":"放大区"},{"correct":false,"misconception":"state_confusion","text":"饱和区"},{"correct":false,"misconception":"state_confusion","text":"截止区"}],"prompt":"测得某三极管三个极电位：VB = 2V，VE = 1.3V，VC = 6V（NPN 管）。它工作在什么区？"}},"sources":["《模拟电子技术基础》童诗白、华成英 — 半导体三极管章节"],"summary":"三极管有发射极、基极、集电极三个极。放大状态下发射结正偏、集电结反偏，基极电流的微小变化能控制集电极电流的大变化，即 iC = β·iB，这就是电流放大作用。","title":"三极管结构与放大原理"},{"id":"q_point","key_points":["Q 点决定能不能不失真地放大","分压式偏置：VB = VCC·Rb2/(Rb1+Rb2)","ICQ ≈ (VB − 0.7)/Re，Re 起稳定作用"],"misconceptions":{"ac_dc_mix":"把直流工作点和交流信号混为一谈，认为 Q 点会随输入信号变化","re_useless":"认为发射极电阻 Re 只是白白消耗电压、没有作用"},"prerequisites":["bjt_basics"],"questions":{"diagnose":{"demonstration":"示范：VB 被分压电阻基本固定。温度↑使 IC↑，于是 VE=IE·Re↑，而 VBE=VB−VE 随之↓，IB↓，最终把 IC 拉回。Re 就是靠这个直流负反馈稳定 Q 点的，所以不能去掉。","explanation":"Re 引入直流电流负反馈，自动抑制 ICQ 随温度的漂移。","hint1":"温度升高时 ICQ 会怎么变？VE = IE·Re 又会怎么变？顺着这条链想下去。","hint2":"这是一个负反馈过程：IC↑ → VE↑ → VBE = VB − VE ↓ → IB↓ → IC 被拉回来。","id":"q_d1","options":[{"correct":true,"text":"稳定静态工作点：温度升高 IC 增大时，VE 升高使 VBE 减小，从而抑制 IC 继续增大"},{"correct":false,"misconception":"re_useless","text":"没有实际作用，去掉它电路照样工作得一样好"},{"correct":false,"misconception":"ac_dc_mix","text":"让交流信号被放大得更大"}],"prompt":"分压式偏置电路中，发射极电阻 Re 的主要作用是？"},"guided":{"demonstration":"示范两步走：先分压 VB = 12 × 10/(30+10) = 3V；再算发射极电流 IEQ = (3 − 0.7)/2k = 1.15mA ≈ ICQ。常见错误是分压取反或忘了减 0.7V。","explanation":"VB = 3V，ICQ ≈ (3−0.7)/2 = 1.15mA。","hint1":"分压公式里，Rb2 是接地的那只电阻。VB = VCC × Rb2/(Rb1+Rb2)。","hint2":"VB=3V 后别忘了减 VBE：ICQ ≈ IEQ = (VB − 0.7)/Re = 2.3/2 ≈ 1.15mA。","id":"q_g1","options":[{"correct":true,"text":"VB = 3V，ICQ ≈ 1.15mA"},{"correct":false,"misconception":"ac_dc_mix","text":"VB = 9V，ICQ ≈ 4.15mA"},{"correct":false,"misconception":"ac_dc_mix","text":"VB = 3V，ICQ ≈ 1.5mA（直接用 VB/Re）"}],"prompt":"VCC = 12V，Rb1 = 30kΩ，Rb2 = 10kΩ，Re = 2kΩ。基极电位 VB 约为？进而 ICQ 约为（取 VBE = 0.7V）？"},"test":{"explanation":"Q 点过高，信号正半周容易把管子推入饱和区，输出（共射，UCE）底部削平，是饱和失真。","id":"q_t1","options":[{"correct":true,"text":"饱和失真，输出波形底部被削平"},{"correct":false,"misconception":"state_confusion","text":"截止失真，输出波形顶部被削平"},{"correct":false,"misconception":"ac_dc_mix","text":"不会失真，Q 点越高放大倍数越大"}],"prompt":"静态工作点 Q 设置得过高（ICQ 太大），输入正弦信号较大时最容易出现哪种失真？"}},"sources":["《模拟电子技术基础》童诗白、华成英 — 基本共射放大电路与静态工作点章节"],"summary":"静态工作点 Q 是无输入信号时三极管的直流状态（IBQ、ICQ、UCEQ）。分压式偏置用 Rb1、Rb2 分压固定基极电位，再用发射极电阻 Re 引入直流负反馈稳定 Q 点。","title":"静态工作点与偏置电路"},{"id":"micro_model","key_points":["只适用于小信号、低频、线性近似","rbe ≈ 200 + (1+β)·26/IEQ(mA)（Ω）","受控电流源 β·ib 是等效电路的核心"],"misconceptions":{"model_real":"把等效电路当成真实电路，认为里面真的有一个电流源器件","rbe_fixed":"认为 rbe 是固定不变的电阻，和静态工作点无关"},"prerequisites":["q_point"],"questions":{"diagnose":{"demonstration":"示范：rbe 不是常数。IEQ 越大，rbe 越小。计算：26/1.15 ≈ 22.6Ω，再乘 (1+β)=51 得约 1153Ω，加上 rbb'≈200Ω，共约 1.35kΩ。","explanation":"rbe ≈ 200 + (1+50)×26/1.15 ≈ 1.35kΩ。","hint1":"rbe 的公式里除了 200Ω，还有一项和 IEQ 有关：(1+β)·26mV/IEQ。","hint2":"代入：200 + 51×26/1.15 ≈ 200 + 1153 ≈ 1353Ω ≈ 1.35kΩ。","id":"m_d1","options":[{"correct":true,"text":"约 1.35kΩ"},{"correct":false,"misconception":"rbe_fixed","text":"恒为 200Ω，与工作点无关"},{"correct":false,"misconception":"rbe_fixed","text":"约 26Ω"}],"prompt":"β = 50，IEQ = 1.15mA。三极管的 rbe 约为多少？"},"guided":{"demonstration":"示范：两步链条：IEQ 在 rbe 公式的分母上，所以 IEQ↑ 则 rbe↓；rbe 又在 Av 公式的分母上，所以 rbe↓ 则 |Av|↑。","explanation":"IEQ 增大 → rbe 减小 → |Av| 增大。","hint1":"先看 rbe 公式里 IEQ 在分母还是分子，再看 Av = −β(Rc//RL)/rbe 里 rbe 在哪。","hint2":"IEQ↑ → rbe↓ → 分母变小 → |Av|↑。这也是调 Q 点能改变增益的原因之一。","id":"m_g1","options":[{"correct":true,"text":"rbe 减小，|Av| 增大"},{"correct":false,"misconception":"rbe_fixed","text":"rbe 增大，|Av| 减小"},{"correct":false,"misconception":"rbe_fixed","text":"rbe 不变，|Av| 不变"}],"prompt":"如果把静态工作点调高（IEQ 增大），rbe 和电压放大倍数 |Av| 会怎样变化？"},"test":{"explanation":"微变等效是小信号线性化近似，受控源只是用来表示 iC 受 iB 控制这一关系的模型元件。","id":"m_t1","options":[{"correct":true,"text":"它只在小信号、低频条件下近似成立，是分析工具而不是真实电路"},{"correct":false,"misconception":"model_real","text":"它对任意大小的信号都精确成立"},{"correct":false,"misconception":"model_real","text":"等效电路中的受控源是电路里真实存在的独立电源"}],"prompt":"关于微变等效电路，下列说法正确的是？"}},"sources":["《模拟电子技术基础》童诗白、华成英 — 三极管的微变等效电路章节"],"summary":"小信号条件下三极管可用微变等效电路近似：基-射之间等效为电阻 rbe，受控源 β·ib 表示电流控制作用。rbe ≈ 200Ω + (1+β)·26mV/IEQ(mA)，随静态电流增大而减小。","title":"微变等效电路"},{"id":"ce_amp","key_points":["Av = −β(Rc//RL)/rbe，负号 = 反相","Ri = Rb1//Rb2//rbe","Ro ≈ Rc，与信号源内阻无关（理想模型下）"],"misconceptions":{"ro_confusion":"把输出电阻 Ro 和负载 RL、或 Rc 本身混淆","sign_meaning":"不理解 Av 公式中负号的含义，或以为是计算错误"},"prerequisites":["micro_model"],"questions":{"diagnose":{"demonstration":"示范：Av = −β(Rc//RL)/rbe，不接 RL 时 Rc//RL = Rc = 4kΩ，Av = −50×4/1.35 ≈ −148。共射电路输出与输入反相，所以带负号。","explanation":"Av = −50 × 4 / 1.35 ≈ −148，负号表示反相。","hint1":"公式 Av = −β·Rc/rbe，三个数直接代入，注意保留负号想想它代表什么。","hint2":"−50×4/1.35 ≈ −148。负号不是笔误，它表示输出电压与输入反相 180°。","id":"ce_d1","options":[{"correct":true,"text":"约 −148"},{"correct":false,"misconception":"sign_meaning","text":"约 +148，正负号无所谓"},{"correct":false,"misconception":"ro_confusion","text":"约 −37"}],"prompt":"β = 50，rbe = 1.35kΩ，Rc = 4kΩ，不接负载 RL。电压放大倍数 Av 约为？"},"guided":{"demonstration":"示范：接负载后等效集电极电阻变为 Rc//RL = 2kΩ，Av = −50×2/1.35 ≈ −74。接负载会拉低增益，这是共射电路带负载能力弱的表现之一。","explanation":"Rc//RL = 2kΩ，Av ≈ −74，增益下降一半。","hint1":"公式里出现的是 Rc//RL，不是 Rc 单独一个。先算并联值。","hint2":"Rc//RL = 4//4 = 2kΩ，是原来的一半，所以 Av 也减半：−50×2/1.35 ≈ −74。","id":"ce_g1","options":[{"correct":true,"text":"减小，约 −74"},{"correct":false,"misconception":"ro_confusion","text":"不变，仍约 −148，负载不影响增益"},{"correct":false,"misconception":"ro_confusion","text":"增大，约 −296"}],"prompt":"在上题电路上接 RL = 4kΩ 负载后，|Av| 会怎样？新的 Av 约为？"},"test":{"explanation":"从输出端看进去，输出电阻约等于集电极电阻 Rc，与负载 RL 无关。","id":"ce_t1","options":[{"correct":true,"text":"Ro ≈ Rc"},{"correct":false,"misconception":"ro_confusion","text":"Ro ≈ RL，取决于外接负载"},{"correct":false,"misconception":"ro_confusion","text":"Ro ≈ rbe"}],"prompt":"共射放大电路的输出电阻 Ro 主要由什么决定？"}},"sources":["《模拟电子技术基础》童诗白、华成英 — 基本共射放大电路的动态分析章节"],"summary":"基本共射放大电路：Av = −β(Rc//RL)/rbe，负号表示输出与输入反相；输入电阻 Ri = Rb//rbe（分压式为 Rb1//Rb2//rbe）；输出电阻 Ro ≈ Rc。","title":"共射放大电路分析（Av、Ri、Ro）"},{"id":"distortion","key_points":["Q 低 → 截止失真；Q 高 → 饱和失真（共射输出波形削平位置相反）","温度↑ → ICBO、ICEO↑、VBE↓ → ICQ↑","稳定 Q 点：分压偏置 + Re 直流负反馈"],"misconceptions":{"distortion_swap":"把截止失真和饱和失真对应的波形削平位置弄反","temp_no_effect":"认为温度对工作点没有影响"},"prerequisites":["q_point","ce_amp"],"questions":{"diagnose":{"demonstration":"示范：判断顺序——先定 Q 点高低，再结合反相关系看波形。Q 低→容易截止→截止失真；Q 高→容易饱和→饱和失真。共射 UCE 波形：截止失真削顶，饱和失真削底。","explanation":"顶部削平对应截止失真，说明 Q 点偏低。","hint1":"共射电路输出与输入反相。输入正半周时管子趋向导通增强还是减弱？UCE 又往哪个方向走？","hint2":"Q 偏低时，信号负半周（输入）容易让管子截止，对应 UCE 冲向 VCC 被削顶——顶部削平是截止失真。","id":"dis_d1","options":[{"correct":true,"text":"Q 点偏低，截止失真"},{"correct":false,"misconception":"distortion_swap","text":"Q 点偏高，饱和失真"},{"correct":false,"misconception":"temp_no_effect","text":"和 Q 点无关，是电源坏了"}],"prompt":"共射放大电路输出波形出现顶部削平（对 UCE 波形而言），Q 点大概率是偏高还是偏低？属于哪种失真？"},"guided":{"demonstration":"示范：温度升高从三条路推高 ICQ：VBE 减小、β 略增、ICBO/ICEO 增大。所以实际电路必须用分压偏置加 Re 来稳住 Q 点。","explanation":"温度升高使 ICQ 增大，Q 点上移，需采取稳定措施。","hint1":"想想温度对 PN 结的影响：同样 IC 下 VBE 随温度升高是变大还是变小？","hint2":"温度↑ → VBE↓（同样偏置下 IB、IC 增大）、反向饱和电流增大 → ICQ 整体上移，Q 点漂移。","id":"dis_g1","options":[{"correct":true,"text":"ICQ 增大；原因包括 VBE 减小、ICBO 增大等，电源电压变化不是三极管本身的原因"},{"correct":false,"misconception":"temp_no_effect","text":"ICQ 减小，因为温度高电阻都变大"},{"correct":false,"misconception":"temp_no_effect","text":"ICQ 不变，温度只影响电阻不影响三极管"}],"prompt":"温度升高时，三极管的 ICQ 会怎么变（其他条件不变）？主要原因不包括哪一项？"},"test":{"explanation":"Ce 对交流近似短路，交流信号不经过 Re，所以增益不被 Re 拉低；直流上 Ce 开路，Re 仍起稳定作用。","id":"dis_t1","options":[{"correct":true,"text":"让 Re 只起直流负反馈稳定 Q 点的作用，而不降低交流电压增益"},{"correct":false,"misconception":"re_useless","text":"让 Re 在直流和交流下都不起任何作用"},{"correct":false,"misconception":"ac_dc_mix","text":"提高电源电压利用率"}],"prompt":"分压式偏置电路中 Re 上并联旁路电容 Ce 的作用是？"}},"sources":["《模拟电子技术基础》童诗白、华成英 — 静态工作点稳定与非线性失真章节"],"summary":"Q 点过低易截止失真，过高易饱和失真；温度升高会使 ICQ 漂移。分压式偏置 + 发射极电阻（旁路电容并联时只保留直流负反馈）是常用的稳定手段。","title":"失真与静态工作点的稳定"},{"id":"cc_cb","key_points":["共集：Av≈1（同相），Ri 高，Ro 低","共基：Av 大（同相），Ri 低，高频好","共射：Av 大（反相），Ri、Ro 适中"],"misconceptions":{"cc_useless":"认为共集电路增益约 1、没有放大作用所以没用","config_mix":"混淆三种组态的输入输出端子和特性"},"prerequisites":["ce_amp"],"questions":{"diagnose":{"demonstration":"示范：评价一个电路不能只看 Av。射极跟随器 Ri 高（少向信号源索取电流）、Ro 低（带负载能力强）、Ai 大，常放在多级放大器的输入级、输出级或中间缓冲级。","explanation":"共集电路的价值在阻抗变换与缓冲，而不是电压增益。","hint1":"放大电路的价值只有电压增益吗？想想它接在信号源和负载之间能解决什么问题。","hint2":"关键词：阻抗变换。前级怕被拉低输入、后级需要低输出电阻驱动时，它就是缓冲级。","id":"cc_d1","options":[{"correct":true,"text":"不对：它虽不放大电压，但输入电阻高、输出电阻低，能起阻抗变换和缓冲作用，还有电流放大"},{"correct":false,"misconception":"cc_useless","text":"对，增益为 1 的电路没有任何用途"},{"correct":false,"misconception":"config_mix","text":"不对，它的电压增益其实很大"}],"prompt":"射极跟随器的电压放大倍数约等于 1，有同学说它没用。这个说法对吗？"},"guided":{"demonstration":"示范：对比表——共射 Ri 适中、共集 Ri 最高、共基 Ri 最低。高频 + 低输入电阻，对应共基。","explanation":"共基组态输入电阻最低、高频特性最好。","hint1":"从发射极输入的是哪种组态？它的输入电阻为什么低？","hint2":"共基从发射极输入，输入电阻约 rbe/(1+β)，很低；且基极接地，高频特性好。","id":"cc_g1","options":[{"correct":true,"text":"共基极"},{"correct":false,"misconception":"config_mix","text":"共集电极"},{"correct":false,"misconception":"config_mix","text":"共射极的输入电阻最低"}],"prompt":"需要一个输入电阻很低、主要用于高频放大的组态，应该选哪种？"},"test":{"explanation":"输出级要驱动小负载，需要低输出电阻，共集电路正符合。","id":"cc_t1","options":[{"correct":true,"text":"输出电阻低，带负载能力强"},{"correct":false,"misconception":"config_mix","text":"电压放大倍数最大"},{"correct":false,"misconception":"config_mix","text":"输入电阻最低"}],"prompt":"多级放大器的输出级常用共集电路，主要原因是？"}},"sources":["《模拟电子技术基础》童诗白、华成英 — 共集电极与共基极放大电路章节"],"summary":"共集（射极跟随器）：电压增益接近 1、输入电阻高、输出电阻低，常作缓冲级。共基：电压增益高、输入电阻低、频率特性好。共射：电压和电流增益都较大，应用最广。","title":"共集、共基与三种组态对比"}],"course":{"description":"从三极管结构与放大原理出发，依次学习静态工作点、微变等效电路、共射放大电路分析、失真与稳定、三种组态对比。每个知识点都走诊断→引导/示范→练习→独立测验的闭环，只有独立测验通过才算掌握。","id":"bjt_amplifier","title":"三极管放大电路"}}
+{
+ "concepts": [
+  {
+   "id": "bjt_basics",
+   "key_points": [
+    "放大条件：发射结正偏、集电结反偏",
+    "iC = β·iB，iE = iB + iC = (1+β)·iB",
+    "三种工作状态：放大、饱和、截止"
+   ],
+   "misconceptions": {
+    "state_confusion": "混淆放大、饱和、截止三种状态的偏置条件",
+    "voltage_amplifier_myth": "把三极管理解成直接放大电压，忽略它本质是电流控制电流"
+   },
+   "prerequisites": [],
+   "questions": {
+    "diagnose": [
+     {
+      "demonstration": "示范：三极管在放大区是一个电流控制器件。iB=20μA 是输入的小电流，β=50 表示放大倍数，所以 iC = 50 × 20μA = 1000μA = 1mA。注意：起控制作用的是 iB，不是某个电压直接被放大。",
+      "explanation": "放大区 iC = β·iB = 50 × 20μA = 1mA。",
+      "hint1": "想一想放大区里 iC 和 iB 之间是什么关系？哪个量控制哪个量？",
+      "hint2": "放大区：iC = β·iB。把 β=50、iB=20μA 代进去算一算。",
+      "id": "basics_d1",
+      "options": [
+       {
+        "correct": true,
+        "text": "1mA"
+       },
+       {
+        "correct": false,
+        "misconception": "voltage_amplifier_myth",
+        "text": "20μA，集电极电流和基极电流一样大"
+       },
+       {
+        "correct": false,
+        "misconception": "state_confusion",
+        "text": "无法判断，要先知道集电极电压"
+       }
+      ],
+      "prompt": "某 NPN 三极管工作时测得 iB = 20μA，β = 50。若它工作在放大区，iC 约为多少？",
+      "type": "mcq"
+     }
+    ],
+    "guided": [
+     {
+      "demonstration": "示范：记住口诀——放大：发正集反；饱和：发正集正；截止：发反。先判断发射结，再判断集电结。",
+      "explanation": "放大区条件：发射结正偏、集电结反偏。",
+      "hint1": "发射结负责把载流子发出去，它需要导通还是截止？",
+      "hint2": "发射结正偏才能发射载流子；集电结反偏才能把载流子收集过去。两个都正偏是饱和，发射结反偏是截止。",
+      "id": "basics_g1",
+      "options": [
+       {
+        "correct": true,
+        "text": "发射结正偏，集电结反偏"
+       },
+       {
+        "correct": false,
+        "misconception": "state_confusion",
+        "text": "发射结正偏，集电结正偏"
+       },
+       {
+        "correct": false,
+        "misconception": "state_confusion",
+        "text": "发射结反偏，集电结反偏"
+       }
+      ],
+      "prompt": "要让 NPN 三极管工作在放大区，两个 PN 结的偏置应该是？",
+      "type": "mcq"
+     },
+     {
+      "type": "numeric",
+      "id": "basics_g2",
+      "prompt": "（课件例题风格）β = 80，IBQ = 40μA，ICQ 约为多少 mA？",
+      "answer": 3.2,
+      "tolerance": 0.05,
+      "unit": "mA",
+      "wrong_misconception": "voltage_amplifier_myth",
+      "hint1": "放大区 ICQ = β·IBQ，注意单位换算：μA × 倍数 = μA，再换成 mA。",
+      "hint2": "80 × 40μA = 3200μA = 3.2mA。",
+      "demonstration": "示范：ICQ = β·IBQ = 80 × 40μA = 3200μA = 3.2mA。计算题最容易错在单位上，先统一单位再算。",
+      "explanation": "ICQ = 80 × 40μA = 3.2mA。"
+     }
+    ],
+    "test": [
+     {
+      "explanation": "VBE = 0.7V 发射结正偏；VC > VB 集电结反偏，所以是放大区。",
+      "id": "basics_t1",
+      "options": [
+       {
+        "correct": true,
+        "text": "放大区"
+       },
+       {
+        "correct": false,
+        "misconception": "state_confusion",
+        "text": "饱和区"
+       },
+       {
+        "correct": false,
+        "misconception": "state_confusion",
+        "text": "截止区"
+       }
+      ],
+      "prompt": "测得某三极管三个极电位：VB = 2V，VE = 1.3V，VC = 6V（NPN 管）。它工作在什么区？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "basics_t2",
+      "prompt": "关于“放大”的本质，课件中的说法是？",
+      "options": [
+       {
+        "text": "放大的本质是能量的控制和转换，且前提是不失真",
+        "correct": true
+       },
+       {
+        "text": "放大的本质是无中生有地产生能量",
+        "correct": false,
+        "misconception": "voltage_amplifier_myth"
+       },
+       {
+        "text": "只要波形变大，失真一点也没关系",
+        "correct": false,
+        "misconception": "voltage_amplifier_myth"
+       }
+      ],
+      "explanation": "放大是利用有源元件实现能量的控制和转换，前提是不失真——失真了放大就没有意义。"
+     }
+    ]
+   },
+   "sources": [
+    "《模拟电子技术基础》童诗白、华成英 — 半导体三极管章节",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "summary": "三极管有发射极、基极、集电极三个极。放大状态下发射结正偏、集电结反偏，基极电流的微小变化能控制集电极电流的大变化，即 iC = β·iB，这就是电流放大作用。",
+   "title": "三极管结构与放大原理"
+  },
+  {
+   "id": "amp_metrics",
+   "title": "放大电路的性能指标",
+   "summary": "衡量一个放大电路好不好，主要看放大倍数 Au、输入电阻 Ri、输出电阻 Ro 和通频带：Ri 越大对前级影响越小，Ro 越小带负载能力越强，通频带越宽适应能力越强。",
+   "key_points": [
+    "电压放大倍数 Au = Uo/Ui（本章重点）",
+    "Ri 越大越好：从前级取的电流越小",
+    "Ro 越小越好：带负载能力越强",
+    "通频带 fBW = fH − fL，越宽越好"
+   ],
+   "prerequisites": [
+    "bjt_basics"
+   ],
+   "misconceptions": {
+    "ri_myth": "误以为输入电阻越小、取电流越大信号越强",
+    "ro_myth": "误以为输出电阻越大输出越强，或把 Ro 和负载 RL 混为一谈"
+   },
+   "sources": [
+    "老师课件《三极管基本放大电路》1.2 电路主要性能指标",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "questions": {
+    "diagnose": [
+     {
+      "type": "mcq",
+      "id": "am_d1",
+      "prompt": "关于输入电阻 Ri，下列说法正确的是？",
+      "options": [
+       {
+        "text": "Ri 越大越好，放大电路从前级取的电流越小，对前级影响越小",
+        "correct": true
+       },
+       {
+        "text": "Ri 越小越好，取的电流越大信号越强",
+        "correct": false,
+        "misconception": "ri_myth"
+       },
+       {
+        "text": "Ri 与前级无关，怎么都行",
+        "correct": false,
+        "misconception": "ri_myth"
+       }
+      ],
+      "hint1": "Ri 衡量的是放大电路从前级（信号源）取电流的大小。取的电流大，前级负担就重。",
+      "hint2": "电流取的越小，对前级影响越小，所以 Ri 越大越好。",
+      "demonstration": "示范：把放大电路看成前级的负载。Ri 就是这个负载的电阻：Ri 越大，同样电压下取的电流越小，前级越轻松，信号也越不容易被拉低。所以 Ri 越大越好。",
+      "explanation": "Ri 越大，从前级取得的电流越小，对前级的影响越小，一般希望 Ri 大。"
+     }
+    ],
+    "guided": [
+     {
+      "type": "mcq",
+      "id": "am_g1",
+      "prompt": "关于输出电阻 Ro，下列说法正确的是？",
+      "options": [
+       {
+        "text": "Ro 越小越好，带负载能力越强",
+        "correct": true
+       },
+       {
+        "text": "Ro 越大越好，输出能力越强",
+        "correct": false,
+        "misconception": "ro_myth"
+       },
+       {
+        "text": "Ro 就是负载 RL，取决于外接什么负载",
+        "correct": false,
+        "misconception": "ro_myth"
+       }
+      ],
+      "hint1": "接上负载后 Uo = Uo'·RL/(RL+Ro)，Ro 在分母里。Ro 越大，分给负载的比例越小。",
+      "hint2": " Ro 越小，负载变化时输出电压越稳定，带负载能力越强。",
+      "demonstration": "示范：放大电路对负载来说像一个带内阻 Ro 的电源。内阻越小，接上负载后电压掉得越少。所以 Ro 越小带负载能力越强。",
+      "explanation": "Ro 越小，带负载能力越强，一般希望 Ro 小。"
+     },
+     {
+      "type": "numeric",
+      "id": "am_g2",
+      "prompt": "某放大电路 Ro = 2kΩ，不接负载时输出电压为 4V。接 RL = 2kΩ 的负载后，输出电压变为多少 V？",
+      "answer": 2.0,
+      "tolerance": 0.1,
+      "unit": "V",
+      "wrong_misconception": "ro_myth",
+      "hint1": "Uo = Uo'·RL/(RL+Ro)，代入 RL=Ro=2kΩ。",
+      "hint2": "RL/(RL+Ro) = 2/(2+2) = 1/2，所以 Uo = 4 × 1/2 = 2V。这也说明 Ro 越大，接负载后掉得越多。",
+      "demonstration": "示范：Uo = 4 × 2/(2+2) = 2V。负载和 Ro 相等时输出正好掉一半。",
+      "explanation": "Uo = Uo'·RL/(RL+Ro) = 4 × 1/2 = 2V。"
+     }
+    ],
+    "test": [
+     {
+      "type": "mcq",
+      "id": "am_t1",
+      "prompt": "通频带的定义和意义，正确的是？",
+      "options": [
+       {
+        "text": "fBW = fH − fL，越宽表示对不同频率信号的适应能力越强",
+        "correct": true
+       },
+       {
+        "text": "fBW = fH + fL，越窄越好",
+        "correct": false,
+        "misconception": "ri_myth"
+       },
+       {
+        "text": "通频带只和放大倍数有关，与频率无关",
+        "correct": false,
+        "misconception": "ri_myth"
+       }
+      ],
+      "explanation": "通频带 fBW = fH − fL（上限截止频率减下限截止频率），越宽适应能力越强。"
+     }
+    ]
+   }
+  },
+  {
+   "id": "q_point",
+   "key_points": [
+    "Q 点决定能不能不失真地放大",
+    "分压式偏置：VB = VCC·Rb2/(Rb1+Rb2)",
+    "ICQ ≈ (VB − 0.7)/Re，Re 起稳定作用"
+   ],
+   "misconceptions": {
+    "ac_dc_mix": "把直流工作点和交流信号混为一谈，认为 Q 点会随输入信号变化",
+    "re_useless": "认为发射极电阻 Re 只是白白消耗电压、没有作用"
+   },
+   "prerequisites": [
+    "bjt_basics"
+   ],
+   "questions": {
+    "diagnose": [
+     {
+      "demonstration": "示范：VB 被分压电阻基本固定。温度↑使 IC↑，于是 VE=IE·Re↑，而 VBE=VB−VE 随之↓，IB↓，最终把 IC 拉回。Re 就是靠这个直流负反馈稳定 Q 点的，所以不能去掉。",
+      "explanation": "Re 引入直流电流负反馈，自动抑制 ICQ 随温度的漂移。",
+      "hint1": "温度升高时 ICQ 会怎么变？VE = IE·Re 又会怎么变？顺着这条链想下去。",
+      "hint2": "这是一个负反馈过程：IC↑ → VE↑ → VBE = VB − VE ↓ → IB↓ → IC 被拉回来。",
+      "id": "q_d1",
+      "options": [
+       {
+        "correct": true,
+        "text": "稳定静态工作点：温度升高 IC 增大时，VE 升高使 VBE 减小，从而抑制 IC 继续增大"
+       },
+       {
+        "correct": false,
+        "misconception": "re_useless",
+        "text": "没有实际作用，去掉它电路照样工作得一样好"
+       },
+       {
+        "correct": false,
+        "misconception": "ac_dc_mix",
+        "text": "让交流信号被放大得更大"
+       }
+      ],
+      "prompt": "分压式偏置电路中，发射极电阻 Re 的主要作用是？",
+      "type": "mcq"
+     }
+    ],
+    "guided": [
+     {
+      "demonstration": "示范两步走：先分压 VB = 12 × 10/(30+10) = 3V；再算发射极电流 IEQ = (3 − 0.7)/2k = 1.15mA ≈ ICQ。常见错误是分压取反或忘了减 0.7V。",
+      "explanation": "VB = 3V，ICQ ≈ (3−0.7)/2 = 1.15mA。",
+      "hint1": "分压公式里，Rb2 是接地的那只电阻。VB = VCC × Rb2/(Rb1+Rb2)。",
+      "hint2": "VB=3V 后别忘了减 VBE：ICQ ≈ IEQ = (VB − 0.7)/Re = 2.3/2 ≈ 1.15mA。",
+      "id": "q_g1",
+      "options": [
+       {
+        "correct": true,
+        "text": "VB = 3V，ICQ ≈ 1.15mA"
+       },
+       {
+        "correct": false,
+        "misconception": "ac_dc_mix",
+        "text": "VB = 9V，ICQ ≈ 4.15mA"
+       },
+       {
+        "correct": false,
+        "misconception": "ac_dc_mix",
+        "text": "VB = 3V，ICQ ≈ 1.5mA（直接用 VB/Re）"
+       }
+      ],
+      "prompt": "VCC = 12V，Rb1 = 30kΩ，Rb2 = 10kΩ，Re = 2kΩ。基极电位 VB 约为？进而 ICQ 约为（取 VBE = 0.7V）？",
+      "type": "mcq"
+     },
+     {
+      "type": "numeric",
+      "id": "q_g2",
+      "prompt": "（课件例题）固定偏置电路：VCC = 12V，Rb = 300kΩ，UBE 取 0V 近似，IBQ 约为多少 μA？",
+      "answer": 40,
+      "tolerance": 1,
+      "unit": "μA",
+      "wrong_misconception": "ac_dc_mix",
+      "hint1": "IBQ ≈ VCC/Rb，单位：V/kΩ = mA，再换算成 μA。",
+      "hint2": "12/300k = 0.04mA = 40μA。",
+      "demonstration": "示范：IBQ ≈ VCC/Rb = 12V/300kΩ = 40μA。这是课件原例题的第一步，后面 ICQ = β·IBQ、UCEQ = VCC − ICQ·Rc 顺次可得。",
+      "explanation": "IBQ ≈ 12/300k = 40μA。"
+     },
+     {
+      "type": "explain",
+      "id": "q_g3",
+      "prompt": "开放题：用自己的话说清这条因果链——温度升高时，分压式偏置电路是怎样自动把 ICQ 拉回来的？（要说到 VE、VBE、IB 的变化）",
+      "rubric_groups": [
+       [
+        "VE",
+        "发射极电位",
+        "发射极电压"
+       ],
+       [
+        "VBE",
+        "UBE"
+       ],
+       [
+        "IB",
+        "基极电流"
+       ],
+       [
+        "负反馈",
+        "抑制",
+        "拉回",
+        "减小"
+       ]
+      ],
+      "model_answer": "温度升高使 IC 增大，流过 Re 的电流增大，VE = IE·Re 升高；VB 被分压电阻基本固定，所以 VBE = VB − VE 减小，导致 IB 减小，最终抑制 IC 的增大——这是直流电流负反馈。",
+      "hint1": "沿着链条想：IC↑ → Re 上的电压 → VE → VBE = VB − VE → IB → IC。",
+      "demonstration": "参考说法：温度升高使 IC 增大，流过 Re 的电流增大，VE = IE·Re 升高；VB 被分压电阻基本固定，所以 VBE = VB − VE 减小，导致 IB 减小，最终抑制 IC 的增大——这是直流电流负反馈。",
+      "explanation": "关键链条：IC↑ → VE↑ → VBE↓ → IB↓ → IC 被抑制，即直流负反馈。"
+     }
+    ],
+    "test": [
+     {
+      "explanation": "Q 点过高，信号正半周容易把管子推入饱和区，输出（共射，UCE）底部削平，是饱和失真。",
+      "id": "q_t1",
+      "options": [
+       {
+        "correct": true,
+        "text": "饱和失真，输出波形底部被削平"
+       },
+       {
+        "correct": false,
+        "misconception": "state_confusion",
+        "text": "截止失真，输出波形顶部被削平"
+       },
+       {
+        "correct": false,
+        "misconception": "ac_dc_mix",
+        "text": "不会失真，Q 点越高放大倍数越大"
+       }
+      ],
+      "prompt": "静态工作点 Q 设置得过高（ICQ 太大），输入正弦信号较大时最容易出现哪种失真？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "q_t2",
+      "prompt": "（课件例题续）上题电路把 Rb 从 300kΩ 减小到 100kΩ（其余不变，β=80，Rc=2kΩ），三极管将进入什么状态？",
+      "options": [
+       {
+        "text": "饱和区：算出的 UCEQ 为负，实际 IC 被限制在饱和电流以内",
+        "correct": true
+       },
+       {
+        "text": "仍在放大区，ICQ 随 IBQ 等比例增大到 9.6mA",
+        "correct": false,
+        "misconception": "ac_dc_mix"
+       },
+       {
+        "text": "截止区，因为 Rb 小了电流反而变小",
+        "correct": false,
+        "misconception": "ac_dc_mix"
+       }
+      ],
+      "explanation": "IBQ 增大到 120μA，按 β 算 IC 应为 9.6mA，但电路最大只能提供约 6mA，且 UCEQ 算出负值，说明管子已饱和。"
+     }
+    ]
+   },
+   "sources": [
+    "《模拟电子技术基础》童诗白、华成英 — 基本共射放大电路与静态工作点章节",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "summary": "静态工作点 Q 是无输入信号时三极管的直流状态（IBQ、ICQ、UCEQ）。分压式偏置用 Rb1、Rb2 分压固定基极电位，再用发射极电阻 Re 引入直流负反馈稳定 Q 点。",
+   "title": "静态工作点与偏置电路"
+  },
+  {
+   "id": "micro_model",
+   "key_points": [
+    "只适用于小信号、低频、线性近似",
+    "rbe ≈ 200 + (1+β)·26/IEQ(mA)（Ω）",
+    "受控电流源 β·ib 是等效电路的核心"
+   ],
+   "misconceptions": {
+    "model_real": "把等效电路当成真实电路，认为里面真的有一个电流源器件",
+    "rbe_fixed": "认为 rbe 是固定不变的电阻，和静态工作点无关"
+   },
+   "prerequisites": [
+    "q_point"
+   ],
+   "questions": {
+    "diagnose": [
+     {
+      "demonstration": "示范：rbe 不是常数。IEQ 越大，rbe 越小。计算：26/1.15 ≈ 22.6Ω，再乘 (1+β)=51 得约 1153Ω，加上 rbb'≈200Ω，共约 1.35kΩ。",
+      "explanation": "rbe ≈ 200 + (1+50)×26/1.15 ≈ 1.35kΩ。",
+      "hint1": "rbe 的公式里除了 200Ω，还有一项和 IEQ 有关：(1+β)·26mV/IEQ。",
+      "hint2": "代入：200 + 51×26/1.15 ≈ 200 + 1153 ≈ 1353Ω ≈ 1.35kΩ。",
+      "id": "m_d1",
+      "options": [
+       {
+        "correct": true,
+        "text": "约 1.35kΩ"
+       },
+       {
+        "correct": false,
+        "misconception": "rbe_fixed",
+        "text": "恒为 200Ω，与工作点无关"
+       },
+       {
+        "correct": false,
+        "misconception": "rbe_fixed",
+        "text": "约 26Ω"
+       }
+      ],
+      "prompt": "β = 50，IEQ = 1.15mA。三极管的 rbe 约为多少？",
+      "type": "mcq"
+     }
+    ],
+    "guided": [
+     {
+      "demonstration": "示范：两步链条：IEQ 在 rbe 公式的分母上，所以 IEQ↑ 则 rbe↓；rbe 又在 Av 公式的分母上，所以 rbe↓ 则 |Av|↑。",
+      "explanation": "IEQ 增大 → rbe 减小 → |Av| 增大。",
+      "hint1": "先看 rbe 公式里 IEQ 在分母还是分子，再看 Av = −β(Rc//RL)/rbe 里 rbe 在哪。",
+      "hint2": "IEQ↑ → rbe↓ → 分母变小 → |Av|↑。这也是调 Q 点能改变增益的原因之一。",
+      "id": "m_g1",
+      "options": [
+       {
+        "correct": true,
+        "text": "rbe 减小，|Av| 增大"
+       },
+       {
+        "correct": false,
+        "misconception": "rbe_fixed",
+        "text": "rbe 增大，|Av| 减小"
+       },
+       {
+        "correct": false,
+        "misconception": "rbe_fixed",
+        "text": "rbe 不变，|Av| 不变"
+       }
+      ],
+      "prompt": "如果把静态工作点调高（IEQ 增大），rbe 和电压放大倍数 |Av| 会怎样变化？",
+      "type": "mcq"
+     },
+     {
+      "type": "numeric",
+      "id": "m_g2",
+      "prompt": "（课件例题）β = 100，IEQ = 4mA，rbe 约为多少 Ω？",
+      "answer": 850,
+      "tolerance": 20,
+      "unit": "Ω",
+      "wrong_misconception": "rbe_fixed",
+      "hint1": "rbe ≈ 200 + (1+β)·26/IEQ，IEQ 用 mA 代入，结果是 Ω。",
+      "hint2": "200 + 101×26/4 = 200 + 656.5 ≈ 850Ω（课件取约 850Ω）。",
+      "demonstration": "示范：rbe ≈ 200 + (1+100)×26/4 ≈ 200 + 657 = 857 ≈ 850Ω。课件原例题就是这组数，记住这个量级：rbe 通常在 1kΩ 左右。",
+      "explanation": "rbe ≈ 200 + 101×26/4 ≈ 850Ω。"
+     }
+    ],
+    "test": [
+     {
+      "explanation": "微变等效是小信号线性化近似，受控源只是用来表示 iC 受 iB 控制这一关系的模型元件。",
+      "id": "m_t1",
+      "options": [
+       {
+        "correct": true,
+        "text": "它只在小信号、低频条件下近似成立，是分析工具而不是真实电路"
+       },
+       {
+        "correct": false,
+        "misconception": "model_real",
+        "text": "它对任意大小的信号都精确成立"
+       },
+       {
+        "correct": false,
+        "misconception": "model_real",
+        "text": "等效电路中的受控源是电路里真实存在的独立电源"
+       }
+      ],
+      "prompt": "关于微变等效电路，下列说法正确的是？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "m_t2",
+      "prompt": "用微变等效电路法分析放大电路时，正确的步骤顺序是？",
+      "options": [
+       {
+        "text": "先求静态工作点 Q → 求 rbe → 画等效电路 → 列方程求 Av、Ri、Ro",
+        "correct": true
+       },
+       {
+        "text": "先画等效电路 → 随便取一个 rbe → 求 Av",
+        "correct": false,
+        "misconception": "rbe_fixed"
+       },
+       {
+        "text": "不需要静态工作点，交流分析与直流无关",
+        "correct": false,
+        "misconception": "model_real"
+       }
+      ],
+      "explanation": "等效电路法四步：定 Q 点、求 rbe、画等效电路、列方程求动态指标。rbe 由 Q 点决定，所以第一步必须是静态分析。"
+     }
+    ]
+   },
+   "sources": [
+    "《模拟电子技术基础》童诗白、华成英 — 三极管的微变等效电路章节",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "summary": "小信号条件下三极管可用微变等效电路近似：基-射之间等效为电阻 rbe，受控源 β·ib 表示电流控制作用。rbe ≈ 200Ω + (1+β)·26mV/IEQ(mA)，随静态电流增大而减小。",
+   "title": "微变等效电路"
+  },
+  {
+   "id": "ce_amp",
+   "key_points": [
+    "Av = −β(Rc//RL)/rbe，负号 = 反相",
+    "Ri = Rb1//Rb2//rbe",
+    "Ro ≈ Rc，与信号源内阻无关（理想模型下）"
+   ],
+   "misconceptions": {
+    "ro_confusion": "把输出电阻 Ro 和负载 RL、或 Rc 本身混淆",
+    "sign_meaning": "不理解 Av 公式中负号的含义，或以为是计算错误"
+   },
+   "prerequisites": [
+    "micro_model"
+   ],
+   "questions": {
+    "diagnose": [
+     {
+      "demonstration": "示范：Av = −β(Rc//RL)/rbe，不接 RL 时 Rc//RL = Rc = 4kΩ，Av = −50×4/1.35 ≈ −148。共射电路输出与输入反相，所以带负号。",
+      "explanation": "Av = −50 × 4 / 1.35 ≈ −148，负号表示反相。",
+      "hint1": "公式 Av = −β·Rc/rbe，三个数直接代入，注意保留负号想想它代表什么。",
+      "hint2": "−50×4/1.35 ≈ −148。负号不是笔误，它表示输出电压与输入反相 180°。",
+      "id": "ce_d1",
+      "options": [
+       {
+        "correct": true,
+        "text": "约 −148"
+       },
+       {
+        "correct": false,
+        "misconception": "sign_meaning",
+        "text": "约 +148，正负号无所谓"
+       },
+       {
+        "correct": false,
+        "misconception": "ro_confusion",
+        "text": "约 −37"
+       }
+      ],
+      "prompt": "β = 50，rbe = 1.35kΩ，Rc = 4kΩ，不接负载 RL。电压放大倍数 Av 约为？",
+      "type": "mcq"
+     }
+    ],
+    "guided": [
+     {
+      "demonstration": "示范：接负载后等效集电极电阻变为 Rc//RL = 2kΩ，Av = −50×2/1.35 ≈ −74。接负载会拉低增益，这是共射电路带负载能力弱的表现之一。",
+      "explanation": "Rc//RL = 2kΩ，Av ≈ −74，增益下降一半。",
+      "hint1": "公式里出现的是 Rc//RL，不是 Rc 单独一个。先算并联值。",
+      "hint2": "Rc//RL = 4//4 = 2kΩ，是原来的一半，所以 Av 也减半：−50×2/1.35 ≈ −74。",
+      "id": "ce_g1",
+      "options": [
+       {
+        "correct": true,
+        "text": "减小，约 −74"
+       },
+       {
+        "correct": false,
+        "misconception": "ro_confusion",
+        "text": "不变，仍约 −148，负载不影响增益"
+       },
+       {
+        "correct": false,
+        "misconception": "ro_confusion",
+        "text": "增大，约 −296"
+       }
+      ],
+      "prompt": "在上题电路上接 RL = 4kΩ 负载后，|Av| 会怎样？新的 Av 约为？",
+      "type": "mcq"
+     },
+     {
+      "type": "numeric",
+      "id": "ce_g2",
+      "prompt": "β = 100，rbe = 850Ω，Rc = 2kΩ，RL = 2kΩ。电压放大倍数 Av 约为多少？（只填数值，可带负号）",
+      "answer": -117.6,
+      "tolerance": 6,
+      "unit": "",
+      "wrong_misconception": "ro_confusion",
+      "hint1": "Av = −β(Rc//RL)/rbe，先算 Rc//RL = 1kΩ，注意 rbe 要用 kΩ 单位（0.85）。",
+      "hint2": "−100×1/0.85 ≈ −117.6。",
+      "demonstration": "示范：Rc//RL = 2//2 = 1kΩ；Av = −100 × 1kΩ / 0.85kΩ ≈ −117.6。单位统一成 kΩ 是这类题最常见的坑。",
+      "explanation": "Av = −β(Rc//RL)/rbe = −100×1/0.85 ≈ −117.6。"
+     },
+     {
+      "type": "explain",
+      "id": "ce_g3",
+      "prompt": "开放题：为什么接上负载 RL 后，电压放大倍数会变小？请结合公式说明。",
+      "rubric_groups": [
+       [
+        "//",
+        "并联",
+        "Rc//RL"
+       ],
+       [
+        "变小",
+        "减小",
+        "降低"
+       ],
+       [
+        "Av",
+        "放大倍数",
+        "增益",
+        "公式"
+       ]
+      ],
+      "model_answer": "因为公式中的集电极电阻变成了 Rc 与 RL 的并联值 Rc//RL，并联后等效电阻小于 Rc 本身；Av = −β(Rc//RL)/rbe，分子变小，所以 |Av| 变小。",
+      "hint1": "看公式 Av = −β(Rc//RL)/rbe 里，接负载前后哪一项变了？并联电阻比原来大还是小？",
+      "demonstration": "参考说法：接负载后集电极等效电阻变为 Rc//RL，并联值小于 Rc，Av 公式分子变小，所以增益下降。",
+      "explanation": "接 RL 后 Rc 变为 Rc//RL（更小），所以 |Av| 减小。"
+     }
+    ],
+    "test": [
+     {
+      "explanation": "从输出端看进去，输出电阻约等于集电极电阻 Rc，与负载 RL 无关。",
+      "id": "ce_t1",
+      "options": [
+       {
+        "correct": true,
+        "text": "Ro ≈ Rc"
+       },
+       {
+        "correct": false,
+        "misconception": "ro_confusion",
+        "text": "Ro ≈ RL，取决于外接负载"
+       },
+       {
+        "correct": false,
+        "misconception": "ro_confusion",
+        "text": "Ro ≈ rbe"
+       }
+      ],
+      "prompt": "共射放大电路的输出电阻 Ro 主要由什么决定？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "ce_t2",
+      "prompt": "分压式偏置共射电路的输入电阻 Ri 等于？",
+      "options": [
+       {
+        "text": "Rb1 // Rb2 // rbe",
+        "correct": true
+       },
+       {
+        "text": "Rb1 + Rb2 + rbe",
+        "correct": false,
+        "misconception": "ro_confusion"
+       },
+       {
+        "text": "只有 rbe，与偏置电阻无关",
+        "correct": false,
+        "misconception": "ro_confusion"
+       }
+      ],
+      "explanation": "从输入端看进去，Rb1、Rb2 与 rbe 三者并联，Ri = Rb1//Rb2//rbe。"
+     }
+    ]
+   },
+   "sources": [
+    "《模拟电子技术基础》童诗白、华成英 — 基本共射放大电路的动态分析章节",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "summary": "基本共射放大电路：Av = −β(Rc//RL)/rbe，负号表示输出与输入反相；输入电阻 Ri = Rb//rbe（分压式为 Rb1//Rb2//rbe）；输出电阻 Ro ≈ Rc。",
+   "title": "共射放大电路分析（Av、Ri、Ro）"
+  },
+  {
+   "id": "distortion",
+   "key_points": [
+    "Q 低 → 截止失真；Q 高 → 饱和失真（共射输出波形削平位置相反）",
+    "温度↑ → ICBO、ICEO↑、VBE↓ → ICQ↑",
+    "稳定 Q 点：分压偏置 + Re 直流负反馈"
+   ],
+   "misconceptions": {
+    "distortion_swap": "把截止失真和饱和失真对应的波形削平位置弄反",
+    "temp_no_effect": "认为温度对工作点没有影响"
+   },
+   "prerequisites": [
+    "q_point",
+    "ce_amp"
+   ],
+   "questions": {
+    "diagnose": [
+     {
+      "demonstration": "示范：判断顺序——先定 Q 点高低，再结合反相关系看波形。Q 低→容易截止→截止失真；Q 高→容易饱和→饱和失真。共射 UCE 波形：截止失真削顶，饱和失真削底。",
+      "explanation": "顶部削平对应截止失真，说明 Q 点偏低。",
+      "hint1": "共射电路输出与输入反相。输入正半周时管子趋向导通增强还是减弱？UCE 又往哪个方向走？",
+      "hint2": "Q 偏低时，信号负半周（输入）容易让管子截止，对应 UCE 冲向 VCC 被削顶——顶部削平是截止失真。",
+      "id": "dis_d1",
+      "options": [
+       {
+        "correct": true,
+        "text": "Q 点偏低，截止失真"
+       },
+       {
+        "correct": false,
+        "misconception": "distortion_swap",
+        "text": "Q 点偏高，饱和失真"
+       },
+       {
+        "correct": false,
+        "misconception": "temp_no_effect",
+        "text": "和 Q 点无关，是电源坏了"
+       }
+      ],
+      "prompt": "共射放大电路输出波形出现顶部削平（对 UCE 波形而言），Q 点大概率是偏高还是偏低？属于哪种失真？",
+      "type": "mcq"
+     }
+    ],
+    "guided": [
+     {
+      "demonstration": "示范：温度升高从三条路推高 ICQ：VBE 减小、β 略增、ICBO/ICEO 增大。所以实际电路必须用分压偏置加 Re 来稳住 Q 点。",
+      "explanation": "温度升高使 ICQ 增大，Q 点上移，需采取稳定措施。",
+      "hint1": "想想温度对 PN 结的影响：同样 IC 下 VBE 随温度升高是变大还是变小？",
+      "hint2": "温度↑ → VBE↓（同样偏置下 IB、IC 增大）、反向饱和电流增大 → ICQ 整体上移，Q 点漂移。",
+      "id": "dis_g1",
+      "options": [
+       {
+        "correct": true,
+        "text": "ICQ 增大；原因包括 VBE 减小、ICBO 增大等，电源电压变化不是三极管本身的原因"
+       },
+       {
+        "correct": false,
+        "misconception": "temp_no_effect",
+        "text": "ICQ 减小，因为温度高电阻都变大"
+       },
+       {
+        "correct": false,
+        "misconception": "temp_no_effect",
+        "text": "ICQ 不变，温度只影响电阻不影响三极管"
+       }
+      ],
+      "prompt": "温度升高时，三极管的 ICQ 会怎么变（其他条件不变）？主要原因不包括哪一项？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "dis_g2",
+      "prompt": "（接诊断题）若 Q 点偏高出现饱和失真，对 NPN 共射电路的输出电压 uo 波形而言，是哪边被削平？",
+      "options": [
+       {
+        "text": "底部被削平",
+        "correct": true
+       },
+       {
+        "text": "顶部被削平（与截止失真一样）",
+        "correct": false,
+        "misconception": "distortion_swap"
+       },
+       {
+        "text": "两边同时削平",
+        "correct": false,
+        "misconception": "distortion_swap"
+       }
+      ],
+      "hint1": "口诀配对：Q 低→截止→削顶；Q 高→饱和→削底（对 uo/UCE 波形而言）。",
+      "hint2": "饱和失真削的是底部。",
+      "demonstration": "示范：这组对应关系必须成对记：截止失真削顶、饱和失真削底，前提是 NPN 共射、看输出电压波形。",
+      "explanation": "饱和失真时 uo 底部被削平；截止失真时顶部被削平。"
+     }
+    ],
+    "test": [
+     {
+      "explanation": "Ce 对交流近似短路，交流信号不经过 Re，所以增益不被 Re 拉低；直流上 Ce 开路，Re 仍起稳定作用。",
+      "id": "dis_t1",
+      "options": [
+       {
+        "correct": true,
+        "text": "让 Re 只起直流负反馈稳定 Q 点的作用，而不降低交流电压增益"
+       },
+       {
+        "correct": false,
+        "misconception": "re_useless",
+        "text": "让 Re 在直流和交流下都不起任何作用"
+       },
+       {
+        "correct": false,
+        "misconception": "ac_dc_mix",
+        "text": "提高电源电压利用率"
+       }
+      ],
+      "prompt": "分压式偏置电路中 Re 上并联旁路电容 Ce 的作用是？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "dis_t2",
+      "prompt": "为了获得尽可能大的不失真输出电压，Q 点一般应设在哪里？",
+      "options": [
+       {
+        "text": "交流负载线的中点附近",
+        "correct": true
+       },
+       {
+        "text": "越靠近饱和区越好",
+        "correct": false,
+        "misconception": "distortion_swap"
+       },
+       {
+        "text": "越靠近截止区越好",
+        "correct": false,
+        "misconception": "distortion_swap"
+       }
+      ],
+      "explanation": "Q 点在交流负载线中点附近时，上下摆幅余量最均衡，最大不失真输出最大。"
+     }
+    ]
+   },
+   "sources": [
+    "《模拟电子技术基础》童诗白、华成英 — 静态工作点稳定与非线性失真章节",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "summary": "Q 点过低易截止失真，过高易饱和失真；温度升高会使 ICQ 漂移。分压式偏置 + 发射极电阻（旁路电容并联时只保留直流负反馈）是常用的稳定手段。",
+   "title": "失真与静态工作点的稳定"
+  },
+  {
+   "id": "cc_cb",
+   "key_points": [
+    "共集：Av≈1（同相），Ri 高，Ro 低",
+    "共基：Av 大（同相），Ri 低，高频好",
+    "共射：Av 大（反相），Ri、Ro 适中"
+   ],
+   "misconceptions": {
+    "cc_useless": "认为共集电路增益约 1、没有放大作用所以没用",
+    "config_mix": "混淆三种组态的输入输出端子和特性"
+   },
+   "prerequisites": [
+    "ce_amp"
+   ],
+   "questions": {
+    "diagnose": [
+     {
+      "demonstration": "示范：评价一个电路不能只看 Av。射极跟随器 Ri 高（少向信号源索取电流）、Ro 低（带负载能力强）、Ai 大，常放在多级放大器的输入级、输出级或中间缓冲级。",
+      "explanation": "共集电路的价值在阻抗变换与缓冲，而不是电压增益。",
+      "hint1": "放大电路的价值只有电压增益吗？想想它接在信号源和负载之间能解决什么问题。",
+      "hint2": "关键词：阻抗变换。前级怕被拉低输入、后级需要低输出电阻驱动时，它就是缓冲级。",
+      "id": "cc_d1",
+      "options": [
+       {
+        "correct": true,
+        "text": "不对：它虽不放大电压，但输入电阻高、输出电阻低，能起阻抗变换和缓冲作用，还有电流放大"
+       },
+       {
+        "correct": false,
+        "misconception": "cc_useless",
+        "text": "对，增益为 1 的电路没有任何用途"
+       },
+       {
+        "correct": false,
+        "misconception": "config_mix",
+        "text": "不对，它的电压增益其实很大"
+       }
+      ],
+      "prompt": "射极跟随器的电压放大倍数约等于 1，有同学说它没用。这个说法对吗？",
+      "type": "mcq"
+     }
+    ],
+    "guided": [
+     {
+      "demonstration": "示范：对比表——共射 Ri 适中、共集 Ri 最高、共基 Ri 最低。高频 + 低输入电阻，对应共基。",
+      "explanation": "共基组态输入电阻最低、高频特性最好。",
+      "hint1": "从发射极输入的是哪种组态？它的输入电阻为什么低？",
+      "hint2": "共基从发射极输入，输入电阻约 rbe/(1+β)，很低；且基极接地，高频特性好。",
+      "id": "cc_g1",
+      "options": [
+       {
+        "correct": true,
+        "text": "共基极"
+       },
+       {
+        "correct": false,
+        "misconception": "config_mix",
+        "text": "共集电极"
+       },
+       {
+        "correct": false,
+        "misconception": "config_mix",
+        "text": "共射极的输入电阻最低"
+       }
+      ],
+      "prompt": "需要一个输入电阻很低、主要用于高频放大的组态，应该选哪种？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "cc_g2",
+      "prompt": "课件指出：共基电路的电压放大倍数与共射电路相比，有什么特点？",
+      "options": [
+       {
+        "text": "大小相等，但没有负号——输入输出同相",
+        "correct": true
+       },
+       {
+        "text": "只有共射的一半",
+        "correct": false,
+        "misconception": "config_mix"
+       },
+       {
+        "text": "大小相等且都反相",
+        "correct": false,
+        "misconception": "config_mix"
+       }
+      ],
+      "hint1": "差别只在相位上。共基不反相。",
+      "hint2": "|Av| 与共射相等（都是 β(Rc//RL)/rbe 量级），但共基为正、同相。",
+      "demonstration": "示范：共基 Av = +β(Rc//RL)/rbe，与共射大小相等、符号相反（同相）。记住这句课件原话，三种组态对比题就稳了一半。",
+      "explanation": "共基与共射 |Av| 相等，但共基同相（无负号）。"
+     }
+    ],
+    "test": [
+     {
+      "explanation": "输出级要驱动小负载，需要低输出电阻，共集电路正符合。",
+      "id": "cc_t1",
+      "options": [
+       {
+        "correct": true,
+        "text": "输出电阻低，带负载能力强"
+       },
+       {
+        "correct": false,
+        "misconception": "config_mix",
+        "text": "电压放大倍数最大"
+       },
+       {
+        "correct": false,
+        "misconception": "config_mix",
+        "text": "输入电阻最低"
+       }
+      ],
+      "prompt": "多级放大器的输出级常用共集电路，主要原因是？",
+      "type": "mcq"
+     },
+     {
+      "type": "mcq",
+      "id": "cc_t2",
+      "prompt": "射极跟随器的输出电阻为什么很低？",
+      "options": [
+       {
+        "text": "从基极看进去的电阻要除以 (1+β)：Ro ≈ Re // [(rbe + Rs′)/(1+β)]，所以很低",
+        "correct": true
+       },
+       {
+        "text": "因为 Re 本身取值就很小",
+        "correct": false,
+        "misconception": "config_mix"
+       },
+       {
+        "text": "因为它没有集电极电阻 Rc",
+        "correct": false,
+        "misconception": "cc_useless"
+       }
+      ],
+      "explanation": "射极输出器的 Ro 中有一项 (rbe+Rs′)/(1+β)，被 β 折合得很小，所以 Ro 低、带负载能力强。"
+     }
+    ]
+   },
+   "sources": [
+    "《模拟电子技术基础》童诗白、华成英 — 共集电极与共基极放大电路章节",
+    "老师课件《三极管基本放大电路》(6-7.pdf)"
+   ],
+   "summary": "共集（射极跟随器）：电压增益接近 1、输入电阻高、输出电阻低，常作缓冲级。共基：电压增益高、输入电阻低、频率特性好。共射：电压和电流增益都较大，应用最广。",
+   "title": "共集、共基与三种组态对比"
+  }
+ ],
+ "course": {
+  "description": "面向现电课程的引导式学习：从三极管结构与放大原理、性能指标出发，依次学习静态工作点、微变等效电路、共射放大电路分析、失真与稳定、三种组态对比。每个知识点走诊断→引导/示范→练习→独立测验的闭环，支持选择、计算填空与开放题，只有独立测验通过才算掌握。",
+  "id": "bjt_amplifier",
+  "title": "现电 · 三极管放大电路"
+ }
+}

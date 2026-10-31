@@ -15,7 +15,7 @@ from . import knowledge, storage, tutor
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
-app = FastAPI(title="Guided Learning Agent — 三极管放大电路")
+app = FastAPI(title="Guided Learning Agent — 现电 · 三极管放大电路")
 
 storage.init_db()
 
@@ -26,8 +26,15 @@ class StartSession(BaseModel):
 
 
 class AnswerIn(BaseModel):
-    option_index: int
+    option_index: int | None = None
+    value: float | None = None
+    text: str | None = None
     confidence: int | None = Field(default=None, ge=1, le=5)
+
+
+class ChatIn(BaseModel):
+    student: str = Field(min_length=1, max_length=40)
+    message: str = Field(min_length=1, max_length=2000)
 
 
 @app.get("/api/course")
@@ -38,6 +45,21 @@ def course():
 @app.get("/api/progress/{student}")
 def progress(student: str):
     return {"student": student, "mastery": storage.get_progress(student)}
+
+
+@app.get("/api/profile/{student}")
+def profile(student: str):
+    return tutor.profile(student)
+
+
+@app.post("/api/chat")
+def chat(payload: ChatIn):
+    return tutor.teacher_chat(payload.student.strip(), payload.message.strip())
+
+
+@app.get("/api/chat/{student}")
+def chat_history(student: str):
+    return {"student": student, "messages": storage.recent_chat(student, limit=50)}
 
 
 @app.post("/api/sessions")
@@ -67,7 +89,7 @@ def hint(session_id: str):
 @app.post("/api/sessions/{session_id}/answer")
 def answer(session_id: str, payload: AnswerIn):
     try:
-        return tutor.answer(session_id, payload.option_index, payload.confidence)
+        return tutor.answer(session_id, payload.model_dump())
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
 

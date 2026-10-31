@@ -49,8 +49,21 @@ def init_db() -> None:
                 updated_at REAL NOT NULL,
                 PRIMARY KEY (student, concept_id)
             );
+            CREATE TABLE IF NOT EXISTS chat_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                student TEXT NOT NULL,
+                role TEXT NOT NULL,
+                content TEXT NOT NULL,
+                created_at REAL NOT NULL
+            );
             """
         )
+        # Lightweight migrations for V0.1 databases.
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(sessions)")}
+        if "q_index" not in cols:
+            conn.execute("ALTER TABLE sessions ADD COLUMN q_index INTEGER NOT NULL DEFAULT 0")
+        if "weak" not in cols:
+            conn.execute("ALTER TABLE sessions ADD COLUMN weak INTEGER NOT NULL DEFAULT 0")
 
 
 def create_session(student: str, concept_id: str) -> dict:
@@ -116,6 +129,41 @@ def set_mastery(student: str, concept_id: str, status: str, evidence: dict) -> N
             " updated_at = excluded.updated_at",
             (student, concept_id, status, json.dumps(evidence, ensure_ascii=False), time.time()),
         )
+
+
+def add_chat_message(student: str, role: str, content: str) -> None:
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO chat_messages (student, role, content, created_at)"
+            " VALUES (?, ?, ?, ?)",
+            (student, role, content, time.time()),
+        )
+
+
+def recent_chat(student: str, limit: int = 10) -> list[dict]:
+    with _conn() as conn:
+        rows = conn.execute(
+            "SELECT role, content FROM chat_messages WHERE student = ?"
+            " ORDER BY id DESC LIMIT ?",
+            (student, limit),
+        ).fetchall()
+    return [{"role": r["role"], "content": r["content"]} for r in reversed(rows)]
+
+
+def misconception_counts(student: str) -> dict[str, int]:
+    """Aggregate misconception codes from this student's answer events."""
+    counts: dict[str, int] = {}
+    with _conn() as conn:
+        rows = conn.execute(
+            "SELECT e.payload FROM events e JOIN sessions s ON s.id = e.session_id"
+            " WHERE s.student = ? AND e.kind = 'answer'",
+            (student,),
+        ).fetchall()
+    for r in rows:
+        code = json.loads(r["payload"]).get("misconception")
+        if code:
+            counts[code] = counts.get(code, 0) + 1
+    return counts
 
 
 def get_progress(student: str) -> dict:

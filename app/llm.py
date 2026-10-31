@@ -1,10 +1,12 @@
-"""Optional LLM layer.
+"""Optional LLM layer (DeepSeek / any OpenAI-compatible endpoint).
 
-Teaching *decisions* never depend on the LLM — they are made by the
-rule-based state machine in tutor.py so they stay explainable and testable.
-When LLM_API_KEY is configured (any OpenAI-compatible endpoint, e.g.
-DeepSeek), the LLM only rephrases the tutor's feedback more naturally.
-Without a key the app runs fully offline with template feedback.
+Teaching *decisions* stay in tutor.py's explainable state machine.
+The LLM is used for three bounded jobs:
+1. polishing feedback wording,
+2. judging open-ended ("explain") answers against a rubric,
+3. the free-form patient-teacher chat.
+Every job has a deterministic offline fallback, so the app never breaks
+without a key or network.
 """
 from __future__ import annotations
 
@@ -21,28 +23,12 @@ def enabled() -> bool:
     return bool(API_KEY)
 
 
-def polish_feedback(system_hint: str, draft: str) -> str:
-    """Return an LLM-polished version of draft, or draft itself on any failure."""
+def _chat(messages: list[dict], temperature: float = 0.4, timeout: int = 30) -> str | None:
     if not enabled():
-        return draft
+        return None
     try:
         body = json.dumps(
-            {
-                "model": MODEL,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": (
-                            "你是一位耐心的模拟电子技术老师。用口语化中文把给学生的反馈"
-                            "改写得更亲切、更清楚，但不得改变其中的教学结论、数字和"
-                            "下一步要求，不得直接给出当前题目的答案。控制在120字内。"
-                            f"背景：{system_hint}"
-                        ),
-                    },
-                    {"role": "user", "content": draft},
-                ],
-                "temperature": 0.4,
-            }
+            {"model": MODEL, "messages": messages, "temperature": temperature}
         ).encode("utf-8")
         req = urllib.request.Request(
             f"{BASE_URL}/chat/completions",
@@ -52,9 +38,60 @@ def polish_feedback(system_hint: str, draft: str) -> str:
                 "Authorization": f"Bearer {API_KEY}",
             },
         )
-        with urllib.request.urlopen(req, timeout=15) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             data = json.loads(resp.read().decode("utf-8"))
         text = data["choices"][0]["message"]["content"].strip()
-        return text or draft
+        return text or None
     except Exception:
-        return draft
+        return None
+
+
+def polish_feedback(system_hint: str, draft: str) -> str:
+    out = _chat(
+        [
+            {
+                "role": "system",
+                "content": (
+                    "你是一位耐心的现电（模拟电子技术）老师。用口语化中文把反馈改写得更亲切清楚，"
+                    "不得改变教学结论、数字和下一步要求，不得给出当前题目答案。120字内。"
+                    f"背景：{system_hint}"
+                ),
+            },
+            {"role": "user", "content": draft},
+        ]
+    )
+    return out or draft
+
+
+def judge_explain(prompt: str, model_answer: str, student_text: str) -> dict | None:
+    """Judge an open answer. Returns {passed, feedback} or None if LLM unavailable."""
+    out = _chat(
+        [
+            {
+                "role": "system",
+                "content": (
+                    "你是现电课程的阅卷老师。判断学生的开放题回答是否抓住了关键因果链。"
+                    "只输出 JSON：{\"passed\": true/false, \"feedback\": \"不超过80字的中文点评，"
+                    "指出答对了什么、缺了什么，不要直接抄标准答案\"}。不要输出其他内容。"
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"题目：{prompt}\n参考答案要点：{model_answer}\n学生回答：{student_text}",
+            },
+        ],
+        temperature=0.1,
+    )
+    if not out:
+        return None
+    try:
+        start, end = out.index("{"), out.rindex("}") + 1
+        verdict = json.loads(out[start:end])
+        return {"passed": bool(verdict["passed"]), "feedback": str(verdict["feedback"])}
+    except Exception:
+        return None
+
+
+def teacher_chat(system_prompt: str, history: list[dict]) -> str | None:
+    """Free-form patient-teacher chat. history includes the new user message."""
+    return _chat([{"role": "system", "content": system_prompt}, *history], temperature=0.5, timeout=45)

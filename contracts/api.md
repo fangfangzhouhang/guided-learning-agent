@@ -9,8 +9,13 @@
   - question 只包含 `id / prompt / options[]`（纯文本），不下发对错与误区信息
 - `POST /api/sessions/{id}/hint` → `{hint_level, hint, demonstration?}`
   - stage=test 时返回 400（独立测验禁用提示）
-- `POST /api/sessions/{id}/answer` `{option_index, confidence?}` →
-  `{correct, misconception, explanation, feedback, action, next_stage?, question?, demonstration?, mastery?}`
+- `POST /api/sessions/{id}/answer` 按题型三选一：`{option_index}`（选择题）/
+  `{value}`（计算填空，数值容差判分）/`{text}`（开放题，LLM 判读或关键词兜底），
+  均可带 `confidence?` →
+  `{correct, misconception, explanation, feedback, action, next_stage?, question?, demonstration?, mastery?, judge_feedback?}`
+- `GET /api/profile/{student}` → 掌握情况 + 误区 Top 榜 + 下一步推荐
+- `POST /api/chat` `{student, message}` → `{reply, mode}`（mode=llm/offline）；
+  `GET /api/chat/{student}` 取历史。老师的人设、知识摘要与学生画像在服务端组装
 
 ## 组间函数接口
 

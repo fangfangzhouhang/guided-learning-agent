@@ -13,6 +13,28 @@ from __future__ import annotations
 import json
 import os
 import urllib.request
+from pathlib import Path
+
+
+def _load_dotenv() -> None:
+    """Load project-root .env into the environment (real env vars win).
+
+    Keeps the documented workflow true: copy .env.example to .env, fill in
+    LLM_API_KEY, run the app — no shell exports needed. The .env file is
+    gitignored and must never be committed.
+    """
+    env_path = Path(__file__).resolve().parent.parent / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+_load_dotenv()
 
 API_KEY = os.environ.get("LLM_API_KEY", "")
 BASE_URL = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com/v1")

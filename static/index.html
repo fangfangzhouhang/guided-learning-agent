@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>引导式学习 Agent · 三极管放大电路</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>引导式学习 Agent</h1>
+  <p class="sub">三极管放大电路 · 一步步引导，不直接给答案；独立测验通过才算掌握</p>
+  <label class="student-box">我是 <input id="student" value="ark" maxlength="40"> </label>
+</header>
+<main>
+  <aside id="map">
+    <h2>知识地图</h2>
+    <div id="concepts"></div>
+    <h2>我的进度</h2>
+    <div id="progress" class="muted">还没有记录，先选一个知识点开始。</div>
+  </aside>
+  <section id="panel">
+    <div id="chat"></div>
+    <div id="question-box" class="hidden">
+      <div class="q-head"><span id="stage-label"></span>
+        <label class="conf">答题前信心：
+          <select id="confidence">
+            <option value="">不填</option>
+            <option value="1">1 完全没把握</option>
+            <option value="2">2 有点没底</option>
+            <option value="3">3 一般</option>
+            <option value="4">4 比较有把握</option>
+            <option value="5">5 非常确定</option>
+          </select>
+        </label>
+      </div>
+      <p id="question-text"></p>
+      <div id="options"></div>
+      <div class="q-actions">
+        <button id="hint-btn" type="button">给我一个提示</button>
+        <span id="hint-note" class="muted"></span>
+      </div>
+      <div id="hint-box" class="hidden"></div>
+    </div>
+    <div id="empty" class="muted">← 在左边选择一个知识点，开始一次引导学习。</div>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; margin: 0; background: #f4f7f4; color: #1d2b1d; }
+header { background: #2e5d3a; color: #fff; padding: 16px 24px; display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
+header h1 { font-size: 20px; margin: 0; }
+header .sub { margin: 0; opacity: .85; font-size: 13px; }
+.student-box input { border: none; border-radius: 6px; padding: 4px 8px; }
+main { display: flex; gap: 16px; padding: 16px; max-width: 1100px; margin: 0 auto; }
+aside { width: 300px; flex-shrink: 0; }
+aside h2 { font-size: 15px; }
+.concept { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 10px 12px; border: 1px solid #cfe0cf; border-radius: 8px; background: #fff; cursor: pointer; font-size: 14px; }
+.concept:hover { border-color: #2e5d3a; }
+.dot { color: #2e5d3a; margin-right: 4px; }
+#panel { flex: 1; background: #fff; border: 1px solid #e0e8e0; border-radius: 10px; padding: 16px; min-height: 480px; }
+#chat { display: flex; flex-direction: column; gap: 8px; max-height: 420px; overflow-y: auto; }
+.msg { padding: 10px 12px; border-radius: 10px; white-space: pre-wrap; font-size: 14px; line-height: 1.6; max-width: 92%; }
+.msg.tutor { background: #eef5ee; align-self: flex-start; }
+.msg.me { background: #dcefe0; align-self: flex-end; }
+#question-box { border-top: 1px dashed #cfe0cf; margin-top: 14px; padding-top: 12px; }
+.q-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; color: #2e5d3a; }
+#question-text { font-weight: 600; }
+.option { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 10px; border: 1px solid #cfe0cf; border-radius: 8px; background: #fafcfa; cursor: pointer; }
+.option:hover { border-color: #2e5d3a; background: #eef5ee; }
+.q-actions { margin-top: 8px; display: flex; gap: 10px; align-items: center; }
+#hint-btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2e5d3a; background: #fff; color: #2e5d3a; cursor: pointer; }
+#hint-btn:disabled { opacity: .4; cursor: not-allowed; }
+#hint-box { margin-top: 10px; background: #fffbe6; border: 1px solid #eee3ae; border-radius: 8px; padding: 10px; white-space: pre-wrap; font-size: 14px; }
+.muted { color: #7a8a7a; font-size: 13px; }
+.hidden { display: none; }

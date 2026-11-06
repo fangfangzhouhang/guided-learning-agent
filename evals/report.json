@@ -132,5 +132,96 @@
       }
     ]
   },
-  "judge_llm": null
+  "judge_llm": {
+    "mode": "llm",
+    "total": 12,
+    "agree": 11,
+    "agreement": 0.917,
+    "cases": [
+      {
+        "id": "ge01_qpoint_full",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge02_qpoint_verbatim",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge03_qpoint_partial",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge04_qpoint_misconception",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge05_qpoint_padding",
+        "category": "padding",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge06_qpoint_empty",
+        "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge07_qpoint_paraphrase",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge08_ce_full",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge09_ce_partial",
+        "category": "partial",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge10_ce_wrong_direction",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge11_ce_paraphrase",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge12_ce_offtopic",
+        "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      }
+    ]
+  }
 }

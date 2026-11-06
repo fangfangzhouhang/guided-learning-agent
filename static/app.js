@@ -214,7 +214,11 @@ async function sendChat() {
   $("#chatsend").disabled = true;
   try {
     const d = await post("/api/chat", { student: student(), message: text });
-    addMsg("ai", d.reply + (d.mode === "offline" ? "\n（当前是离线模板引导；页面顶部有离线原因自检）" : ""));
+    let extra = d.mode === "offline" ? "\n（当前是离线模板引导；页面顶部有离线原因自检）" : "";
+    if ((d.sources || []).length) {
+      extra += "\n\n📚 本次回答依据：" + d.sources.map((s, i) => "[" + (i + 1) + "] " + s.source).join("；");
+    }
+    addMsg("ai", d.reply + extra);
   } catch (e) { addMsg("ai", "网络有点问题，等下再问我一次。"); }
   $("#chatsend").disabled = false;
   loadStatus();

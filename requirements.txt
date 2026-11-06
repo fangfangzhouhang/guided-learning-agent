@@ -2,3 +2,6 @@ fastapi>=0.110
 uvicorn>=0.29
 pydantic>=2.6
 fsrs==6.3.2
+# V0.5 RAG (optional at runtime: without these, the app runs as before)
+sentence-transformers>=5.0
+sqlite-vec>=0.1.6

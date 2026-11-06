@@ -4,3 +4,6 @@ __pycache__/
 data.db
 tests/test.db
 .env
+models/
+rag.db
+drafts/

@@ -14,7 +14,7 @@ as passed_with_help or needs_review — never from the student saying
 """
 from __future__ import annotations
 
-from . import elo, knowledge, llm, review, storage
+from . import elo, knowledge, llm, rag, review, storage
 
 MAX_HINTS_FOR_MASTERY = 1
 
@@ -322,14 +322,33 @@ def _teacher_system_prompt(student: str) -> str:
 def teacher_chat(student: str, message: str) -> dict:
     storage.add_chat_message(student, "user", message)
     history = storage.recent_chat(student, limit=10)
-    reply = llm.teacher_chat(_teacher_system_prompt(student), history)
+    # V0.5 RAG: ground the teacher in retrieved course evidence when the
+    # index exists. No evidence -> the prompt orders honesty, not invention.
+    sources: list[dict] = []
+    system = _teacher_system_prompt(student)
+    try:
+        if rag.available():
+            sources = rag.retrieve(message)
+    except Exception:
+        sources = []
+    if sources:
+        evidence = "\n".join(f"[{i + 1}] 出处：{s['source']}\n{s['text']}"
+                             for i, s in enumerate(sources))
+        system += (
+            "\n\n【检索到的课程资料（优先依据这些回答；引用时在句末标注 [1] 这类编号）】\n"
+            + evidence
+            + "\n要求：涉及公式、数值、结论时必须以资料为准并标注编号；资料没覆盖的"
+              "部分要明确说“课程资料里没查到”，不要凭印象编造。"
+        )
+    reply = llm.teacher_chat(system, history)
     if reply is None:
         reply = _offline_teacher_reply(message)
         mode = "offline"
     else:
         mode = "llm"
     storage.add_chat_message(student, "assistant", reply)
-    return {"reply": reply, "mode": mode}
+    return {"reply": reply, "mode": mode,
+            "sources": [{"source": s["source"], "score": s["score"]} for s in sources]}
 
 
 def _offline_teacher_reply(message: str) -> str:

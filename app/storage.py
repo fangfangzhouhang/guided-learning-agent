@@ -56,6 +56,14 @@ def init_db() -> None:
                 content TEXT NOT NULL,
                 created_at REAL NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS review_cards (
+                student TEXT NOT NULL,
+                concept_id TEXT NOT NULL,
+                card_json TEXT NOT NULL,
+                due REAL NOT NULL,
+                updated_at REAL NOT NULL,
+                PRIMARY KEY (student, concept_id)
+            );
             CREATE TABLE IF NOT EXISTS ratings (
                 kind TEXT NOT NULL,
                 entity_id TEXT NOT NULL,
@@ -91,6 +99,39 @@ def set_rating(kind: str, entity_id: str, rating: float, attempts: int) -> None:
             "attempts = excluded.attempts",
             (kind, entity_id, rating, attempts),
         )
+
+
+def get_review_card(student: str, concept_id: str) -> dict | None:
+    with _conn() as conn:
+        row = conn.execute(
+            "SELECT card_json, due FROM review_cards WHERE student = ? AND concept_id = ?",
+            (student, concept_id),
+        ).fetchone()
+    if not row:
+        return None
+    return {"card": json.loads(row["card_json"]), "due": row["due"]}
+
+
+def set_review_card(student: str, concept_id: str, card: dict, due: float) -> None:
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO review_cards (student, concept_id, card_json, due, updated_at) "
+            "VALUES (?, ?, ?, ?, ?) ON CONFLICT(student, concept_id) DO UPDATE SET "
+            "card_json = excluded.card_json, due = excluded.due, "
+            "updated_at = excluded.updated_at",
+            (student, concept_id, json.dumps(card), due, time.time()),
+        )
+
+
+def list_review_cards(student: str) -> list[dict]:
+    with _conn() as conn:
+        rows = conn.execute(
+            "SELECT concept_id, card_json, due FROM review_cards WHERE student = ? "
+            "ORDER BY due",
+            (student,),
+        ).fetchall()
+    return [{"concept_id": r["concept_id"], "card": json.loads(r["card_json"]),
+             "due": r["due"]} for r in rows]
 
 
 def all_question_ratings() -> list[dict]:

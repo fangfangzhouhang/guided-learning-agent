@@ -11,7 +11,9 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import knowledge, llm, storage, tutor
+import time
+
+from . import knowledge, llm, review, storage, tutor
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
@@ -70,6 +72,20 @@ def progress(student: str):
 @app.get("/api/profile/{student}")
 def profile(student: str):
     return tutor.profile(student)
+
+
+@app.get("/api/reviews/{student}")
+def reviews(student: str):
+    due, upcoming = [], []
+    for item in review.all_reviews(student):
+        try:
+            title = knowledge.get_concept(item["concept_id"])["title"]
+        except Exception:
+            title = item["concept_id"]
+        entry = {**item, "title": title}
+        (due if item["due"] <= time.time() else upcoming).append(entry)
+    return {"student": student, "due": due, "upcoming": upcoming,
+            "scheduler": review.scheduler_name()}
 
 
 @app.post("/api/chat")

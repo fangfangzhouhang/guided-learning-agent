@@ -24,6 +24,7 @@ function route() {
     a.classList.toggle("active", a.dataset.nav === page || (page === "study" && a.dataset.nav === "course")));
   if (page === "study" && param) { $("#view-study").classList.add("active"); startStudy(param); }
   else if (page === "chat") { $("#view-chat").classList.add("active"); loadChat(); }
+  else if (page === "review") { $("#view-review").classList.add("active"); loadReview(); }
   else if (page === "profile") { $("#view-profile").classList.add("active"); loadProfile(); }
   else { $("#view-course").classList.add("active"); loadCourse(); }
   window.scrollTo(0, 0);
@@ -222,6 +223,27 @@ $("#chatsend").addEventListener("click", sendChat);
 $("#chatin").addEventListener("keydown", e => { if (e.key === "Enter") sendChat(); });
 
 /* ---------------- profile page ---------------- */
+/* ---------------- review ---------------- */
+function fmtDue(ts) {
+  const d = new Date(ts * 1000);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0");
+}
+
+async function loadReview() {
+  const r = await api("/api/reviews/" + encodeURIComponent(student()));
+  const badge = $("#dueBadge");
+  if (badge) badge.textContent = r.due.length ? "（" + r.due.length + "）" : "";
+  let html = "<div class=\"pcard\"><h3>⏰ 到期该复测了</h3>" + (r.due.length
+    ? "<ul>" + r.due.map(x => "<li>" + esc(x.title) + "（到期 " + fmtDue(x.due) + "）—— <a href=\"#/study/" +
+      x.concept_id + "\">现在复测</a></li>").join("") + "</ul>"
+    : "<p class=\"empty\">现在没有到期项。学完的知识点会在遗忘前自动出现在这里。</p>") + "</div>";
+  html += "<div class=\"pcard\"><h3>🗓 排队中</h3>" + (r.upcoming.length
+    ? "<ul>" + r.upcoming.map(x => "<li>" + esc(x.title) + "：下次 " + fmtDue(x.due) + "</li>").join("") + "</ul>"
+    : "<p class=\"empty\">还没有排期，先去课程页学完一节。</p>") + "</div>";
+  $("#reviewBody").innerHTML = html;
+}
+
 async function loadProfile() {
   const p = await api("/api/profile/" + encodeURIComponent(student()));
   const state = { mastered: "✅ 已掌握", passed_with_help: "🟡 帮助下通过", needs_review: "🔴 待复习" };
@@ -243,5 +265,13 @@ async function loadProfile() {
   $("#profileBody").innerHTML = html;
 }
 
+async function refreshDueBadge() {
+  try {
+    const r = await api("/api/reviews/" + encodeURIComponent(student()));
+    const badge = $("#dueBadge");
+    if (badge) badge.textContent = r.due.length ? "（" + r.due.length + "）" : "";
+  } catch (e) { /* badge is decorative */ }
+}
+
 /* ---------------- boot ---------------- */
-(async () => { await loadStatus(); await loadCourse(); route(); })();
+(async () => { await loadStatus(); await loadCourse(); await refreshDueBadge(); route(); })();

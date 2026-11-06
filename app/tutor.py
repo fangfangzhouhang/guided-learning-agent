@@ -14,7 +14,7 @@ as passed_with_help or needs_review — never from the student saying
 """
 from __future__ import annotations
 
-from . import elo, knowledge, llm, storage
+from . import elo, knowledge, llm, review, storage
 
 MAX_HINTS_FOR_MASTERY = 1
 
@@ -214,9 +214,10 @@ def answer(session_id: str, payload: dict) -> dict:
             else:
                 status, action = "needs_review", "needs_review"
                 draft = "独立测验没有全对，没关系——已经把卡点记进你的画像了，复习时会优先推这个知识点。学习记录不会假装你已经掌握。"
-            storage.set_mastery(session["student"], concept_id, status,
-                                {"test_all_correct": all_correct,
-                                 "hints_used": fresh["hints_used"], "weak": bool(fresh["weak"])})
+            evidence = {"test_all_correct": all_correct,
+                        "hints_used": fresh["hints_used"], "weak": bool(fresh["weak"])}
+            storage.set_mastery(session["student"], concept_id, status, evidence)
+            review.record_result(session["student"], concept_id, status, evidence)
             result["action"] = action
             result["mastery"] = status
 

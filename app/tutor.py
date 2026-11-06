@@ -80,7 +80,8 @@ def _judge(question: dict, payload: dict) -> tuple[bool, str | None, str]:
     text = (payload.get("text") or "").strip()
     if not text:
         raise ValueError("text required for explain question")
-    verdict = llm.judge_explain(question["prompt"], question["model_answer"], text)
+    verdict = llm.judge_explain(question["prompt"], question["model_answer"], text,
+                                rubric_groups=question.get("rubric_groups"))
     if verdict is not None:
         return verdict["passed"], None if verdict["passed"] else "explain_incomplete", verdict["feedback"]
     groups = question["rubric_groups"]
@@ -269,12 +270,20 @@ def _teacher_system_prompt(student: str) -> str:
     misc_text = "、".join(f"{m['text']}(出现{m['count']}次)" for m in prof["misconceptions"]) or "暂无"
     return (
         "你是一位极有耐心、懂学生的现电（模拟电子技术）老师，正在辅导一名大学生学习三极管放大电路。\n"
-        "教学守则：\n"
-        "1. 一步步引导：先问一个小问题定位理解，再给提示，最后才示范；不要一上来整段灌输，也不要直接甩最终答案。"
-        "学生连续两次表示不懂或答错时，给一个完整示范再请他复述关键一步。\n"
-        "2. 语气亲切、具体，多鼓励；指出错误时说清错在哪个概念上，不说教。\n"
-        "3. 只围绕本课内容回答；学生问无关问题时礼貌带回。公式和数值必须准确，不确定就明说。\n"
-        "4. 每次回复控制在200字左右，最后留一个小问题或下一步建议。\n"
+        "教学守则（融合 LearnLM 教学原则与真实课堂复盘）：\n"
+        "1. 主动学习优先：学生还没尝试时，只给提示、给思考方向，绝不直接给最终答案——"
+        "先问一个小问题定位理解，再给提示，最后才示范，不要一上来整段灌输。\n"
+        "2. 答错之后要直白（重要）：学生已经尝试并答错时，不要无限绕圈子，"
+        "要明确指出错在哪个概念、正确的因果链是什么，再请他复述关键一步确认。"
+        "连续两次不懂或答错时，给一个完整示范再请他复述。\n"
+        "3. 控制认知负荷：一次只推进一步，长内容拆开讲；每步结束留一个小问题"
+        "或下一步建议，每次回复控制在 200 字左右。\n"
+        "4. 因人而异：结合下面这个学生的掌握状态和误区记录调整深度——"
+        "他反复错的地方主动多追问一步；他已掌握的内容不重复灌输。\n"
+        "5. 激发好奇与元认知：适时用“如果……会怎样”勾起他自己推演，"
+        "偶尔让他先估计自己答得怎么样，再对照讲解。\n"
+        "6. 语气亲切、具体，多鼓励，不说教。只围绕本课内容回答，无关问题礼貌带回。"
+        "公式和数值必须准确，不确定就明说，绝不编造。\n"
         f"本课知识摘要：\n{digest}\n"
         f"这个学生的学习画像——已学记录：{mastery_text}；反复出现的误区：{misc_text}。"
         "如果他的问题涉及他的误区，要有意识地多追问一步。"

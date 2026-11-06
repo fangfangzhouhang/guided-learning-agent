@@ -86,24 +86,43 @@ def polish_feedback(system_hint: str, draft: str) -> str:
     return out or draft
 
 
-def judge_explain(prompt: str, model_answer: str, student_text: str) -> dict | None:
-    """Judge an open answer. Returns {passed, feedback} or None if LLM unavailable."""
+def _judge_once(prompt: str, model_answer: str, student_text: str,
+                rubric_groups: list | None) -> dict | None:
+    """One structured judging pass (rubric template borrowed from
+    Prometheus-Eval's shape, run on our own API model — no local model)."""
+    if rubric_groups:
+        rubric = "\n".join(
+            f"  {i + 1}. {' / '.join(g)}" for i, g in enumerate(rubric_groups))
+    else:
+        rubric = "  （见参考答案要点）"
     out = _chat(
         [
             {
                 "role": "system",
                 "content": (
-                    "你是现电课程的阅卷老师。判断学生的开放题回答是否抓住了关键因果链。"
-                    "只输出 JSON：{\"passed\": true/false, \"feedback\": \"不超过80字的中文点评，"
-                    "指出答对了什么、缺了什么，不要直接抄标准答案\"}。不要输出其他内容。"
+                    "你是现电课程的阅卷老师，按评分标准逐项核对学生的开放题回答。\n"
+                    "判定规则（严格执行）：\n"
+                    "1. 先看因果链：方向必须正确、链条必须完整。方向反了或链条断裂，"
+                    "无论关键词出现多少，一律不通过。\n"
+                    "2. 再逐项核对评分标准：说清了才算命中，只蹭到关键词、没有说清"
+                    "因果关系的不算命中。\n"
+                    "3. 字数多、态度好不加分；堆砌术语凑长度按未说清处理。\n"
+                    "4. 关键项全部命中且因果正确才判 passed=true，缺任何关键一环"
+                    "即 passed=false。\n"
+                    "只输出 JSON：{\"passed\": true/false, \"feedback\": \"不超过80字的"
+                    "中文点评，指出说对了什么、缺了或错了什么，不要抄标准答案\"}。"
+                    "不要输出其他内容。"
                 ),
             },
             {
                 "role": "user",
-                "content": f"题目：{prompt}\n参考答案要点：{model_answer}\n学生回答：{student_text}",
+                "content": (
+                    f"题目：{prompt}\n参考答案要点：{model_answer}\n"
+                    f"评分标准（逐项核对）：\n{rubric}\n学生回答：{student_text}"
+                ),
             },
         ],
-        temperature=0.1,
+        temperature=0.2,
     )
     if not out:
         return None
@@ -113,6 +132,28 @@ def judge_explain(prompt: str, model_answer: str, student_text: str) -> dict | N
         return {"passed": bool(verdict["passed"]), "feedback": str(verdict["feedback"])}
     except Exception:
         return None
+
+
+def judge_explain(prompt: str, model_answer: str, student_text: str,
+                  rubric_groups: list | None = None) -> dict | None:
+    """Judge an open answer with self-consistency voting.
+
+    The same answer is judged JUDGE_SAMPLES times (default 3) and the
+    majority verdict wins — a single LLM judgement is measurably easy to
+    fool with keyword stuffing (see docs/evals.md). Returns
+    {passed, feedback, votes} or None if every call failed (the caller
+    then falls back to the deterministic keyword judge).
+    """
+    samples = max(1, int(os.environ.get("JUDGE_SAMPLES", "3")))
+    verdicts = [v for v in (_judge_once(prompt, model_answer, student_text, rubric_groups)
+                            for _ in range(samples)) if v is not None]
+    if not verdicts:
+        return None
+    passed_votes = sum(1 for v in verdicts if v["passed"])
+    passed = passed_votes * 2 > len(verdicts)
+    representative = next(v for v in verdicts if v["passed"] == passed)
+    return {"passed": passed, "feedback": representative["feedback"],
+            "votes": f"{passed_votes}/{len(verdicts)}"}
 
 
 def teacher_chat(system_prompt: str, history: list[dict]) -> str | None:

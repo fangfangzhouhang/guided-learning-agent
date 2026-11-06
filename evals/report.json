@@ -1,0 +1,136 @@
+{
+  "teaching": {
+    "total": 7,
+    "passed": 7,
+    "cases": [
+      {
+        "id": "tc01_perfect_student",
+        "passed": true,
+        "detail": "expected mastery=mastered, got mastered"
+      },
+      {
+        "id": "tc02_all_wrong",
+        "passed": true,
+        "detail": "expected mastery=needs_review, got needs_review"
+      },
+      {
+        "id": "tc03_hint_dependent",
+        "passed": true,
+        "detail": "expected mastery=passed_with_help, got passed_with_help"
+      },
+      {
+        "id": "tc04_guided_struggle",
+        "passed": true,
+        "detail": "expected mastery=passed_with_help, got passed_with_help"
+      },
+      {
+        "id": "tc05_misconception_attribution",
+        "passed": true,
+        "detail": "expected misconception voltage_amplifier_myth in profile, got ['voltage_amplifier_myth']"
+      },
+      {
+        "id": "tc06_overconfident_flag",
+        "passed": true,
+        "detail": "expected calibration flag, got '你答题前很有信心但答错了——这正是「感觉懂了」的错觉，下次遇到这种题要多留个心眼。'"
+      },
+      {
+        "id": "tc07_hint_blocked_in_test",
+        "passed": true,
+        "detail": "hint refused in test stage"
+      }
+    ]
+  },
+  "judge_offline": {
+    "mode": "offline",
+    "total": 12,
+    "agree": 7,
+    "agreement": 0.583,
+    "cases": [
+      {
+        "id": "ge01_qpoint_full",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge02_qpoint_verbatim",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge03_qpoint_partial",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge04_qpoint_misconception",
+        "category": "misconception",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge05_qpoint_padding",
+        "category": "padding",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge06_qpoint_empty",
+        "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge07_qpoint_paraphrase",
+        "category": "full",
+        "expected": true,
+        "got": false,
+        "agree": false
+      },
+      {
+        "id": "ge08_ce_full",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge09_ce_partial",
+        "category": "partial",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge10_ce_wrong_direction",
+        "category": "misconception",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge11_ce_paraphrase",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge12_ce_offtopic",
+        "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      }
+    ]
+  },
+  "judge_llm": null
+}

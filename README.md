@@ -41,6 +41,18 @@ uvicorn app.main:app --reload
 pip install pytest && python -m pytest -q
 ```
 
+## 评测（Eval Harness）
+
+教学决策与开放题判分都用固定评测集量，不靠感觉（详见 `docs/evals.md`）：
+
+```bash
+python -m evals.run_evals
+```
+
+基线（2026-11-07 实测）：教学案例 7/7 通过；开放题离线关键词判分与人工
+标注一致率 7/12 ≈ 0.58（分歧案例逐条记录在 `docs/evals.md`——离线判分
+仅作兜底，正式使用请配置 LLM 判分）。
+
 或者用 Docker 一键运行：
 
 ```bash

@@ -27,3 +27,21 @@ Copy an existing file in `content/`, keep the schema
 (`course` + `concepts` with `questions.diagnose/guided/test` pools),
 and it will be picked up automatically. See `contracts/api.md` for the
 question format.
+
+## Drafting new questions (LLM-assisted, human-gated)
+
+New questions may be *drafted* with the misconception-first tool — but a
+draft is never course content until two humans have reviewed it:
+
+```bash
+python -m tools.draft_items --concept <concept_id> --misconception <code>
+```
+
+The tool writes to `drafts/` with a structural validation gate (exactly
+one correct option; every wrong option tagged with an existing
+misconception code). Review protocol before a draft may enter
+`content/`: reviewer 1 checks concept accuracy and re-solves all
+numbers independently; reviewer 2 checks every wrong option really
+expresses its tagged misconception and no option is ambiguous. Both
+sign off in the PR description. Unreviewed drafts must never be copied
+into `content/` — this rule is absolute.

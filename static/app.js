@@ -235,6 +235,11 @@ async function loadProfile() {
     : "<p class=\"empty\">暂时没有记录到反复误区，继续保持。</p>") + "</div>";
   html += "<div class=\"pcard\"><h3>🎯 下一步建议</h3><p>" + ((p.recommendation || {}).reason || "") +
     ((p.recommendation || {}).concept_id ? " —— <a href=\"#/study/" + p.recommendation.concept_id + "\">现在就去</a>" : "") + "</p></div>";
+  if ((p.hardest_questions || []).length) {
+    html += "<div class=\"pcard\"><h3>📐 大家觉得最难的题（作答数据标定）</h3><p>你的当前水平分：" +
+      p.student_rating + "（与题目同尺对比，答对难题涨得多）</p><ul>" +
+      p.hardest_questions.map(q => "<li>难度 " + q.rating + "（" + q.attempts + " 次作答）：" + esc(q.title) + "</li>").join("") + "</ul></div>";
+  }
   $("#profileBody").innerHTML = html;
 }
 

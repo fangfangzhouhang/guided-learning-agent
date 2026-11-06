@@ -14,7 +14,7 @@ as passed_with_help or needs_review — never from the student saying
 """
 from __future__ import annotations
 
-from . import knowledge, llm, storage
+from . import elo, knowledge, llm, storage
 
 MAX_HINTS_FOR_MASTERY = 1
 
@@ -108,6 +108,14 @@ def answer(session_id: str, payload: dict) -> dict:
         {"stage": stage, "question_id": question["id"], "correct": correct,
          "misconception": misconception, "confidence": confidence},
     )
+    # Elo: only the first attempt at this question in this session counts
+    # as evidence (guided retries after a demonstration are practice).
+    prior_attempts = sum(
+        1 for e in storage.list_events(session_id)
+        if e["kind"] == "answer" and e["payload"].get("question_id") == question["id"]
+    )
+    elo_update = (elo.record_attempt(session["student"], concept_id, question["id"], correct)
+                  if prior_attempts == 1 else None)
     concept = knowledge.get_concept(concept_id)
     result: dict = {
         "correct": correct,
@@ -115,6 +123,8 @@ def answer(session_id: str, payload: dict) -> dict:
         "explanation": question["explanation"],
         "calibration": _calibration(confidence, correct),
     }
+    if elo_update:
+        result["elo"] = elo_update
     if extra:
         result["judge_feedback"] = extra
     if misconception and misconception in concept["misconceptions"]:
@@ -248,11 +258,29 @@ def profile(student: str) -> dict:
                 break
     if recommendation is None:
         recommendation = {"concept_id": None, "reason": "这一章都学过了，可以开始间隔复习或挑战自由提问"}
+    student_rating, _ = storage.get_rating("student", student)
+    hardest = []
+    for row in sorted(storage.all_question_ratings(), key=lambda r: -r["rating"]):
+        cid, qid = row["entity_id"].split("/", 1)
+        try:
+            q = next(q for st in ("diagnose", "guided", "test")
+                     for q in knowledge.get_concept(cid)["questions"][st]
+                     if q["id"] == qid)
+            title = q["prompt"].split("（")[0][:40]
+        except Exception:
+            title = row["entity_id"]
+        hardest.append({"question": row["entity_id"], "title": title,
+                        "rating": round(row["rating"], 1),
+                        "attempts": row["attempts"]})
+        if len(hardest) >= 5:
+            break
     return {
         "student": student,
         "mastery": mastery,
         "misconceptions": [{"code": code, "count": n, "text": texts.get(code, code)} for code, n in top],
         "recommendation": recommendation,
+        "student_rating": round(student_rating, 1),
+        "hardest_questions": hardest,
     }
 
 

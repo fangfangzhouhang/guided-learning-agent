@@ -56,6 +56,13 @@ def init_db() -> None:
                 content TEXT NOT NULL,
                 created_at REAL NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS ratings (
+                kind TEXT NOT NULL,
+                entity_id TEXT NOT NULL,
+                rating REAL NOT NULL DEFAULT 1200,
+                attempts INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY (kind, entity_id)
+            );
             """
         )
         # Lightweight migrations for V0.1 databases.
@@ -64,6 +71,34 @@ def init_db() -> None:
             conn.execute("ALTER TABLE sessions ADD COLUMN q_index INTEGER NOT NULL DEFAULT 0")
         if "weak" not in cols:
             conn.execute("ALTER TABLE sessions ADD COLUMN weak INTEGER NOT NULL DEFAULT 0")
+
+
+def get_rating(kind: str, entity_id: str) -> tuple[float, int]:
+    """(rating, attempts) for a student or a question; defaults for new."""
+    with _conn() as conn:
+        row = conn.execute(
+            "SELECT rating, attempts FROM ratings WHERE kind = ? AND entity_id = ?",
+            (kind, entity_id),
+        ).fetchone()
+    return (row["rating"], row["attempts"]) if row else (1200.0, 0)
+
+
+def set_rating(kind: str, entity_id: str, rating: float, attempts: int) -> None:
+    with _conn() as conn:
+        conn.execute(
+            "INSERT INTO ratings (kind, entity_id, rating, attempts) VALUES (?, ?, ?, ?) "
+            "ON CONFLICT(kind, entity_id) DO UPDATE SET rating = excluded.rating, "
+            "attempts = excluded.attempts",
+            (kind, entity_id, rating, attempts),
+        )
+
+
+def all_question_ratings() -> list[dict]:
+    with _conn() as conn:
+        rows = conn.execute(
+            "SELECT entity_id, rating, attempts FROM ratings WHERE kind = 'question'"
+        ).fetchall()
+    return [dict(r) for r in rows]
 
 
 def create_session(student: str, concept_id: str) -> dict:

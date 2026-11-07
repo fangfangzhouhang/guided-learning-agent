@@ -42,9 +42,9 @@
   },
   "judge_offline": {
     "mode": "offline",
-    "total": 12,
-    "agree": 7,
-    "agreement": 0.583,
+    "total": 30,
+    "agree": 17,
+    "agreement": 0.567,
     "cases": [
       {
         "id": "ge01_qpoint_full",
@@ -129,14 +129,140 @@
         "expected": false,
         "got": false,
         "agree": true
+      },
+      {
+        "id": "ge13_qpoint_vb_first",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge14_qpoint_no_ib",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge15_qpoint_feedback_word_only",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge16_qpoint_wrong_mechanism",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge17_qpoint_terse_full",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge18_qpoint_wrong_conclusion",
+        "category": "misconception",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge19_qpoint_padding2",
+        "category": "padding",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge20_qpoint_with_example",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge21_qpoint_half_reversed",
+        "category": "misconception",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge22_ce_with_numbers",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge23_ce_rbe_wrong",
+        "category": "misconception",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge24_ce_series_wrong",
+        "category": "misconception",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge25_ce_formula_only",
+        "category": "partial",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge26_ce_padding",
+        "category": "padding",
+        "expected": false,
+        "got": true,
+        "agree": false
+      },
+      {
+        "id": "ge27_ce_paraphrase2",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge28_ce_unrelated_correct_fact",
+        "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge29_ce_distractor_but_right",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge30_qpoint_ie_confusion",
+        "category": "partial",
+        "expected": false,
+        "got": true,
+        "agree": false
       }
     ]
   },
   "judge_llm": {
     "mode": "llm",
-    "total": 12,
-    "agree": 11,
-    "agreement": 0.917,
+    "total": 30,
+    "agree": 29,
+    "agreement": 0.967,
     "cases": [
       {
         "id": "ge01_qpoint_full",
@@ -218,6 +344,132 @@
       {
         "id": "ge12_ce_offtopic",
         "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge13_qpoint_vb_first",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge14_qpoint_no_ib",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge15_qpoint_feedback_word_only",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge16_qpoint_wrong_mechanism",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge17_qpoint_terse_full",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge18_qpoint_wrong_conclusion",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge19_qpoint_padding2",
+        "category": "padding",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge20_qpoint_with_example",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge21_qpoint_half_reversed",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge22_ce_with_numbers",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge23_ce_rbe_wrong",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge24_ce_series_wrong",
+        "category": "misconception",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge25_ce_formula_only",
+        "category": "partial",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge26_ce_padding",
+        "category": "padding",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge27_ce_paraphrase2",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge28_ce_unrelated_correct_fact",
+        "category": "offtopic",
+        "expected": false,
+        "got": false,
+        "agree": true
+      },
+      {
+        "id": "ge29_ce_distractor_but_right",
+        "category": "full",
+        "expected": true,
+        "got": true,
+        "agree": true
+      },
+      {
+        "id": "ge30_qpoint_ie_confusion",
+        "category": "partial",
         "expected": false,
         "got": false,
         "agree": true

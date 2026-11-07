@@ -148,6 +148,78 @@ def available() -> bool:
 
 
 # ------------------------------------------------------------------ query
+def _tokens(text: str) -> list[str]:
+    """BM25 tokens: Chinese character bigrams + ASCII words/symbols
+    (formulas like Rc//RL and UCEQ survive as ASCII tokens)."""
+    import re
+
+    text = text.lower()
+    toks = re.findall(r"[a-z0-9]+(?:\.[0-9]+)?", text)
+    han = [ch for ch in text if "\u4e00" <= ch <= "\u9fff"]
+    toks += [a + b for a, b in zip(han, han[1:])]
+    toks += han  # unigrams keep single-char concepts findable
+    return toks
+
+
+def bm25_ranking(query: str) -> list[dict]:
+    """Okapi BM25 over all chunks (the corpus is small; for a much larger
+    pack this ranking should be persisted at index-build time)."""
+    import math
+
+    if not available():
+        return []
+    conn = _connect()
+    rows = conn.execute("SELECT id, concept, source, text FROM chunks").fetchall()
+    conn.close()
+    docs = [dict(r) for r in rows]
+    doc_tokens = [_tokens(d["text"]) for d in docs]
+    n = len(docs)
+    avgdl = sum(len(t) for t in doc_tokens) / max(1, n)
+    df: dict[str, int] = {}
+    for toks in doc_tokens:
+        for t in set(toks):
+            df[t] = df.get(t, 0) + 1
+    q = set(_tokens(query))
+    k1, b = 1.5, 0.75
+    scored = []
+    for d, toks in zip(docs, doc_tokens):
+        tf: dict[str, int] = {}
+        for t in toks:
+            tf[t] = tf.get(t, 0) + 1
+        score = 0.0
+        for t in q:
+            if t not in tf:
+                continue
+            idf = math.log(1 + (n - df[t] + 0.5) / (df[t] + 0.5))
+            denom = tf[t] + k1 * (1 - b + b * len(toks) / max(1.0, avgdl))
+            score += idf * (tf[t] * (k1 + 1)) / denom
+        if score > 0:
+            scored.append({**d, "bm25": score})
+    return sorted(scored, key=lambda d: -d["bm25"])
+
+
+def hybrid_candidates(query: str, k: int = 20, embedder=None) -> list[dict]:
+    """Vector recall + BM25, fused with Reciprocal Rank Fusion.
+
+    The two retrievers fail differently: vectors miss exact formula
+    symbols, BM25 misses paraphrases. RRF needs no score calibration
+    between them, which is why it is the fusion rule here.
+    """
+    vec = search(query, k=k, embedder=embedder)
+    bm = bm25_ranking(query)[:k]
+    fused: dict[str, dict] = {}
+    scores: dict[str, float] = {}
+    for rank, hit in enumerate(vec):
+        key = hit["source"] + "|" + hit["text"][:40]
+        fused[key] = hit
+        scores[key] = scores.get(key, 0.0) + 1.0 / (60 + rank)
+    for rank, hit in enumerate(bm):
+        key = hit["source"] + "|" + hit["text"][:40]
+        fused.setdefault(key, hit)
+        scores[key] = scores.get(key, 0.0) + 1.0 / (60 + rank)
+    return [fused[key] for key in sorted(scores, key=lambda kk: -scores[kk])[:k]]
+
+
 def search(query: str, k: int = 20, embedder=None) -> list[dict]:
     """Vector recall only (no re-ranking)."""
     import sqlite_vec
@@ -173,7 +245,7 @@ def retrieve(query: str, top_n: int = 5, embedder=None, reranker=None) -> list[d
     An empty result is a *meaningful* outcome: the caller must not invent
     an answer from nothing (refusal policy, see docs/rag.md).
     """
-    candidates = search(query, k=20, embedder=embedder)
+    candidates = hybrid_candidates(query, k=20, embedder=embedder)
     if not candidates:
         return []
     reranker = reranker or _load_reranker()

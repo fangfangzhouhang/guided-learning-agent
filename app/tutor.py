@@ -319,6 +319,23 @@ def _teacher_system_prompt(student: str) -> str:
     )
 
 
+def _retrieval_query(student: str, message: str) -> str:
+    """Follow-up questions ('那它为什么会变小？') carry no searchable terms.
+
+    When the message is short or referential, prepend the previous user
+    question so retrieval sees the full intent. Only retrieval uses the
+    rewritten query; the conversation itself is untouched.
+    """
+    referential = any(w in message for w in ("它", "这", "那", "呢", "为什么会"))
+    if len(message) > 14 and not referential:
+        return message
+    history = storage.recent_chat(student, limit=10)
+    prev_user = [m["content"] for m in history if m["role"] == "user"]
+    if len(prev_user) >= 2:  # last entry is the current message itself
+        return prev_user[-2] + " " + message
+    return message
+
+
 def teacher_chat(student: str, message: str) -> dict:
     storage.add_chat_message(student, "user", message)
     history = storage.recent_chat(student, limit=10)
@@ -328,7 +345,7 @@ def teacher_chat(student: str, message: str) -> dict:
     system = _teacher_system_prompt(student)
     try:
         if rag.available():
-            sources = rag.retrieve(message)
+            sources = rag.retrieve(_retrieval_query(student, message))
     except Exception:
         sources = []
     if sources:

@@ -1,1 +1,57 @@
-[{"expect_source_contains":"ce_amp","id":"rq01_load_effect","query":"为什么接上负载之后电压放大倍数会变小？"},{"expect_source_contains":"q_point","id":"rq02_temp_stability","query":"温度升高时工作点为什么会漂移，分压式偏置是怎么稳住的？"},{"expect_source_contains":"bjt_basics","id":"rq03_device_states","query":"三极管的放大、饱和、截止三种状态分别是什么偏置条件？"},{"expect_source_contains":"ce_amp","id":"rq04_gain_formula","query":"共射放大电路的电压放大倍数公式是什么，rbe 怎么算？"},{"expect_source_contains":"q_point","id":"rq05_bias_calc","query":"分压式偏置电路怎么求静态工作点 IBQ、ICQ 和 UCEQ？"},{"expect_source_contains":"","id":"rq06_off_topic_cooking","query":"红烧肉怎么做才好吃？"},{"expect_source_contains":"","id":"rq07_off_topic_poem","query":"李白的静夜思全文是什么？"},{"expect_source_contains":"bjt_basics","id":"rq08_what_is_beta","query":"三极管的电流放大系数β是什么意思？"}]
+[
+ {
+  "expect_source_contains": "ce_amp",
+  "id": "rq01_load_effect",
+  "query": "为什么接上负载之后电压放大倍数会变小？"
+ },
+ {
+  "expect_source_contains": "q_point",
+  "id": "rq02_temp_stability",
+  "query": "温度升高时工作点为什么会漂移，分压式偏置是怎么稳住的？"
+ },
+ {
+  "expect_source_contains": "bjt_basics",
+  "id": "rq03_device_states",
+  "query": "三极管的放大、饱和、截止三种状态分别是什么偏置条件？"
+ },
+ {
+  "expect_source_contains": "ce_amp",
+  "id": "rq04_gain_formula",
+  "query": "共射放大电路的电压放大倍数公式是什么，rbe 怎么算？"
+ },
+ {
+  "expect_source_contains": "q_point",
+  "id": "rq05_bias_calc",
+  "query": "分压式偏置电路怎么求静态工作点 IBQ、ICQ 和 UCEQ？"
+ },
+ {
+  "expect_source_contains": "",
+  "id": "rq06_off_topic_cooking",
+  "query": "红烧肉怎么做才好吃？"
+ },
+ {
+  "expect_source_contains": "",
+  "id": "rq07_off_topic_poem",
+  "query": "李白的静夜思全文是什么？"
+ },
+ {
+  "expect_source_contains": "bjt_basics",
+  "id": "rq08_what_is_beta",
+  "query": "三极管的电流放大系数β是什么意思？"
+ },
+ {
+  "id": "rq09_rbe_formula",
+  "query": "rbe 的公式里 26 是怎么来的，为什么要除以 IE？",
+  "expect_source_contains": "micro_model"
+ },
+ {
+  "id": "rq10_uceq_symbol",
+  "query": "UCEQ 到底怎么算？",
+  "expect_source_contains": "q_point"
+ },
+ {
+  "id": "rq11_ro_symbol",
+  "query": "Ro 和 Ri 分别是什么，怎么测？",
+  "expect_source_contains": "amp_metrics"
+ }
+]

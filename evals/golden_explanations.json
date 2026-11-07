@@ -1,1 +1,243 @@
-[{"answer":"温度升高后集电极电流变大，流过发射极电阻的电流也变大，发射极电位 VE 被抬高。VB 由分压电阻固定，VBE = VB − VE 就变小，基极电流 IB 随之减小，最后把 IC 的增大抑制下去，这是负反馈。","category":"full","expected_passed":true,"id":"ge01_qpoint_full","note":"完整因果链，换了自己的说法","question_ref":"q_point/q_g3"},{"answer":"温度升高使 IC 增大，流过 Re 的电流增大，VE = IE·Re 升高；VB 被分压电阻基本固定，所以 VBE = VB − VE 减小，导致 IB 减小，最终抑制 IC 的增大。","category":"full","expected_passed":true,"id":"ge02_qpoint_verbatim","note":"接近标准答案的复述","question_ref":"q_point/q_g3"},{"answer":"温度升高会让 VE 升高，于是 VBE 变小，工作点就稳定了。","category":"partial","expected_passed":false,"id":"ge03_qpoint_partial","note":"只说到 VBE，缺 IB 变化和负反馈闭环，不算说清因果链","question_ref":"q_point/q_g3"},{"answer":"温度升高时 VE 升高，使 VBE 增大，IB 增大，IC 进一步增大，形成正反馈把电流拉回来。","category":"misconception","expected_passed":false,"id":"ge04_qpoint_misconception","note":"方向全反：VBE 应减小、是负反馈。关键词齐全，是专门考判分会不会被关键词骗的探针","question_ref":"q_point/q_g3"},{"answer":"这是一个非常经典的分压式偏置电路问题，涉及到 VE、VBE、IB 等重要概念，这些概念在放大电路中非常关键，负反馈也是电子技术中的核心思想之一，学习时要认真理解每个符号的含义，把基础打牢，这样考试的时候才能灵活运用，抑制温漂是设计电路时经常要考虑的问题。","category":"padding","expected_passed":false,"id":"ge05_qpoint_padding","note":"凑字数攻击：关键词密度高但没有任何因果链。人工标准为不通过","question_ref":"q_point/q_g3"},{"answer":"不知道，书上好像讲过。","category":"offtopic","expected_passed":false,"id":"ge06_qpoint_empty","note":"无内容","question_ref":"q_point/q_g3"},{"answer":"热起来之后发射极那边的电位被电流顶高了，基极电位又被分压钉住，所以 UBE 被压缩，基极电流回落，集电极电流的上涨就被压住了。","category":"full","expected_passed":true,"id":"ge07_qpoint_paraphrase","note":"全口语化表达，因果链完整","question_ref":"q_point/q_g3"},{"answer":"接上 RL 后，集电极电阻变成 Rc 与 RL 并联，即 Rc//RL，并联值比 Rc 小。Av = −β(Rc//RL)/rbe，分子变小，所以放大倍数变小。","category":"full","expected_passed":true,"id":"ge08_ce_full","note":"完整且带公式","question_ref":"ce_amp/ce_g3"},{"answer":"因为负载和 Rc 并联了，并联以后电阻变小，所以增益就下来了。","category":"partial","expected_passed":false,"id":"ge09_ce_partial","note":"方向对但没有结合公式说明（题目明确要求结合公式），按人工标准不通过","question_ref":"ce_amp/ce_g3"},{"answer":"接上负载后 Rc 和 RL 并联，等效电阻变大，Av 公式里分子变大，所以放大倍数变大。","category":"misconception","expected_passed":false,"id":"ge10_ce_wrong_direction","note":"结论方向错误。含并联、Av 等关键词，探针案例","question_ref":"ce_amp/ce_g3"},{"answer":"负载接进来等于给集电极那边多并了一条支路，等效负载电阻被拉小，增益公式的分子跟着变小，放大倍数自然降低。","category":"full","expected_passed":true,"id":"ge11_ce_paraphrase","note":"口语化但逻辑完整","question_ref":"ce_amp/ce_g3"},{"answer":"因为电路里加了东西，情况就变复杂了，具体要看仿真结果。","category":"offtopic","expected_passed":false,"id":"ge12_ce_offtopic","note":"无实质内容","question_ref":"ce_amp/ce_g3"}]
+[
+ {
+  "answer": "温度升高后集电极电流变大，流过发射极电阻的电流也变大，发射极电位 VE 被抬高。VB 由分压电阻固定，VBE = VB − VE 就变小，基极电流 IB 随之减小，最后把 IC 的增大抑制下去，这是负反馈。",
+  "category": "full",
+  "expected_passed": true,
+  "id": "ge01_qpoint_full",
+  "note": "完整因果链，换了自己的说法",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "温度升高使 IC 增大，流过 Re 的电流增大，VE = IE·Re 升高；VB 被分压电阻基本固定，所以 VBE = VB − VE 减小，导致 IB 减小，最终抑制 IC 的增大。",
+  "category": "full",
+  "expected_passed": true,
+  "id": "ge02_qpoint_verbatim",
+  "note": "接近标准答案的复述",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "温度升高会让 VE 升高，于是 VBE 变小，工作点就稳定了。",
+  "category": "partial",
+  "expected_passed": false,
+  "id": "ge03_qpoint_partial",
+  "note": "只说到 VBE，缺 IB 变化和负反馈闭环，不算说清因果链",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "温度升高时 VE 升高，使 VBE 增大，IB 增大，IC 进一步增大，形成正反馈把电流拉回来。",
+  "category": "misconception",
+  "expected_passed": false,
+  "id": "ge04_qpoint_misconception",
+  "note": "方向全反：VBE 应减小、是负反馈。关键词齐全，是专门考判分会不会被关键词骗的探针",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "这是一个非常经典的分压式偏置电路问题，涉及到 VE、VBE、IB 等重要概念，这些概念在放大电路中非常关键，负反馈也是电子技术中的核心思想之一，学习时要认真理解每个符号的含义，把基础打牢，这样考试的时候才能灵活运用，抑制温漂是设计电路时经常要考虑的问题。",
+  "category": "padding",
+  "expected_passed": false,
+  "id": "ge05_qpoint_padding",
+  "note": "凑字数攻击：关键词密度高但没有任何因果链。人工标准为不通过",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "不知道，书上好像讲过。",
+  "category": "offtopic",
+  "expected_passed": false,
+  "id": "ge06_qpoint_empty",
+  "note": "无内容",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "热起来之后发射极那边的电位被电流顶高了，基极电位又被分压钉住，所以 UBE 被压缩，基极电流回落，集电极电流的上涨就被压住了。",
+  "category": "full",
+  "expected_passed": true,
+  "id": "ge07_qpoint_paraphrase",
+  "note": "全口语化表达，因果链完整",
+  "question_ref": "q_point/q_g3"
+ },
+ {
+  "answer": "接上 RL 后，集电极电阻变成 Rc 与 RL 并联，即 Rc//RL，并联值比 Rc 小。Av = −β(Rc//RL)/rbe，分子变小，所以放大倍数变小。",
+  "category": "full",
+  "expected_passed": true,
+  "id": "ge08_ce_full",
+  "note": "完整且带公式",
+  "question_ref": "ce_amp/ce_g3"
+ },
+ {
+  "answer": "因为负载和 Rc 并联了，并联以后电阻变小，所以增益就下来了。",
+  "category": "partial",
+  "expected_passed": false,
+  "id": "ge09_ce_partial",
+  "note": "方向对但没有结合公式说明（题目明确要求结合公式），按人工标准不通过。复议结论(2026-11-07): 维持不通过——题面明确要求结合公式说明, 答案未出现任何公式或 Av 表达; LLM 判通过属从宽, 记录为已知分歧。",
+  "question_ref": "ce_amp/ce_g3",
+  "borderline": true
+ },
+ {
+  "answer": "接上负载后 Rc 和 RL 并联，等效电阻变大，Av 公式里分子变大，所以放大倍数变大。",
+  "category": "misconception",
+  "expected_passed": false,
+  "id": "ge10_ce_wrong_direction",
+  "note": "结论方向错误。含并联、Av 等关键词，探针案例",
+  "question_ref": "ce_amp/ce_g3"
+ },
+ {
+  "answer": "负载接进来等于给集电极那边多并了一条支路，等效负载电阻被拉小，增益公式的分子跟着变小，放大倍数自然降低。",
+  "category": "full",
+  "expected_passed": true,
+  "id": "ge11_ce_paraphrase",
+  "note": "口语化但逻辑完整",
+  "question_ref": "ce_amp/ce_g3"
+ },
+ {
+  "answer": "因为电路里加了东西，情况就变复杂了，具体要看仿真结果。",
+  "category": "offtopic",
+  "expected_passed": false,
+  "id": "ge12_ce_offtopic",
+  "note": "无实质内容",
+  "question_ref": "ce_amp/ce_g3"
+ },
+ {
+  "id": "ge13_qpoint_vb_first",
+  "question_ref": "q_point/q_g3",
+  "category": "full",
+  "expected_passed": true,
+  "answer": "先看基极电位：它被 Rb1、Rb2 分压固定，基本不随温度变。温度升高 IC 本来要增大，IE 跟着增大，VE=IE·Re 被抬高，于是 VBE=VB−VE 变小，IB 被压下来，最终 IC 增大的趋势被抵消。",
+  "note": "换叙述顺序（先 VB 后链条），因果完整"
+ },
+ {
+  "id": "ge14_qpoint_no_ib",
+  "question_ref": "q_point/q_g3",
+  "category": "partial",
+  "expected_passed": false,
+  "answer": "温度升高后 VE 升高，VBE 变小，所以工作点能稳定下来，不会一直漂移。",
+  "note": "链条断在 VBE：没说 IB 和 IC 怎么被拉回"
+ },
+ {
+  "id": "ge15_qpoint_feedback_word_only",
+  "question_ref": "q_point/q_g3",
+  "category": "partial",
+  "expected_passed": false,
+  "answer": "因为这个电路有负反馈，所以温度升高时能自动稳定工作点，这就是分压式偏置的优点。",
+  "note": "只有结论词“负反馈”，没有任何机制展开"
+ },
+ {
+  "id": "ge16_qpoint_wrong_mechanism",
+  "question_ref": "q_point/q_g3",
+  "category": "misconception",
+  "expected_passed": false,
+  "answer": "温度升高时 Re 受热阻值变大，流过它的电流被限制住，所以 IC 就被拉回来了，是 Re 本身的限流作用。",
+  "note": "机制编造：把稳定作用归因于 Re 阻值随温度变化"
+ },
+ {
+  "id": "ge17_qpoint_terse_full",
+  "question_ref": "q_point/q_g3",
+  "category": "full",
+  "expected_passed": true,
+  "answer": "IC↑→VE↑→VBE↓→IB↓→IC 被压回，负反馈。",
+  "note": "极简但链条完整且方向正确"
+ },
+ {
+  "id": "ge18_qpoint_wrong_conclusion",
+  "question_ref": "q_point/q_g3",
+  "category": "misconception",
+  "expected_passed": false,
+  "answer": "温度升高 IC 增大，VE 升高导致 VBE 减小，IB 随之增大，最后 IC 被稳定住。",
+  "note": "前半对、结论反：VBE 减小应使 IB 减小，前后矛盾"
+ },
+ {
+  "id": "ge19_qpoint_padding2",
+  "question_ref": "q_point/q_g3",
+  "category": "padding",
+  "expected_passed": false,
+  "answer": "VE、VBE、IB、IC、Re、负反馈这些都是偏置电路的核心概念，考试经常考，大家一定要把每个符号的定义背熟，理解它们之间的关系，这样做题的时候就不会慌，基础最重要。",
+  "note": "灌水变体：符号罗列+学习建议，零因果"
+ },
+ {
+  "id": "ge20_qpoint_with_example",
+  "question_ref": "q_point/q_g3",
+  "category": "full",
+  "expected_passed": true,
+  "answer": "比如温度从 25 度升到 60 度，IC 有增大的趋势，IE 增大使 Re 上压降变大、VE 上升；VB 是分压定的，VBE 就被挤小，基极电流 IB 减小，刚好把 IC 的增量顶回去，这就是发射极电阻的直流负反馈。",
+  "note": "带具体情境，因果完整"
+ },
+ {
+  "id": "ge21_qpoint_half_reversed",
+  "question_ref": "q_point/q_g3",
+  "category": "misconception",
+  "expected_passed": false,
+  "answer": "温度升高 IC 增大，流过 Re 的电流增大使 VE 降低，VBE=VB−VE 增大，IB 增大后又抑制了 IC。",
+  "note": "VE 方向说反（应为升高），后面全链条跟着错位"
+ },
+ {
+  "id": "ge22_ce_with_numbers",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "full",
+  "expected_passed": true,
+  "answer": "比如 Rc=3kΩ、RL=3kΩ，接上后等效电阻是 3//3=1.5kΩ，比原来小了一半；Av=−β(Rc//RL)/rbe，分子减半，所以放大倍数大约变成原来的一半。",
+  "note": "带数值例证，机制与公式都对"
+ },
+ {
+  "id": "ge23_ce_rbe_wrong",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "misconception",
+  "expected_passed": false,
+  "answer": "接上负载后输入信号被 RL 分流，rbe 变大，Av=−βRc/rbe 里分母变大，所以放大倍数变小。",
+  "note": "归因错误：变化的是 Rc 的等效值，不是 rbe"
+ },
+ {
+  "id": "ge24_ce_series_wrong",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "misconception",
+  "expected_passed": false,
+  "answer": "RL 接上后和 Rc 串联，总电阻变大，电流变小，所以输出电压和放大倍数都变小。",
+  "note": "串并联关系说反（应为并联）"
+ },
+ {
+  "id": "ge25_ce_formula_only",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "partial",
+  "expected_passed": false,
+  "answer": "Av = −β(Rc//RL)/rbe。",
+  "note": "只写公式，没有说明为什么变小，结合公式说明的要求未达到"
+ },
+ {
+  "id": "ge26_ce_padding",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "padding",
+  "expected_passed": false,
+  "answer": "放大倍数 Av、并联、Rc、RL、rbe、增益这些概念都很重要，负载对电路的影响是模电的核心内容，要理解公式背后的物理意义，多做题多总结，考试一定没问题。",
+  "note": "灌水：术语密度高，零解释"
+ },
+ {
+  "id": "ge27_ce_paraphrase2",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "full",
+  "expected_passed": true,
+  "answer": "输出端挂上负载，等于在集电极那边又并了一条路，等效集电极电阻被拉低，增益公式的分子跟着变小，放大倍数自然就降下来了。",
+  "note": "口语化完整解释"
+ },
+ {
+  "id": "ge28_ce_unrelated_correct_fact",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "offtopic",
+  "expected_passed": false,
+  "answer": "接负载后输入电阻 Ri 不变，因为 Ri 看的是 Rb 和 rbe 那一边；输出电阻 Ro 约等于 Rc。",
+  "note": "说的事实基本没错，但答非所问：没解释 Av 为何变小"
+ },
+ {
+  "id": "ge29_ce_distractor_but_right",
+  "question_ref": "ce_amp/ce_g3",
+  "category": "full",
+  "expected_passed": true,
+  "answer": "关键在集电极等效电阻：接 RL 后变 Rc//RL 并联值变小，Av=−β(Rc//RL)/rbe 分子变小所以增益下降。顺带一提这不影响静态工作点，Q 点还是原来那个。",
+  "note": "主链正确，附带一句正确旁注，不应被判错"
+ },
+ {
+  "id": "ge30_qpoint_ie_confusion",
+  "question_ref": "q_point/q_g3",
+  "category": "partial",
+  "expected_passed": false,
+  "answer": "温度升高 IC 增大，VE 升高，VBE 减小，这样 IE 就减小了，工作点稳定。",
+  "note": "把最后一步说成 IE 减小（应为 IB 减小带动 IC），链条关键环节错位"
+ }
+]

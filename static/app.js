@@ -67,6 +67,15 @@ async function loadCourse() {
   const mastered = courseData.concepts.filter(c => (prog.mastery[c.id] || {}).status === "mastered").length;
   $("#courseBar").style.width = (total ? mastered / total * 100 : 0) + "%";
   $("#courseBarMeta").textContent = "已真正掌握 " + mastered + " / " + total + " 个知识点（以无提示独立测验全对为准）";
+  try {
+    const rv = await api("/api/reviews/" + encodeURIComponent(student()));
+    const banner = $("#dueBanner");
+    if (rv.due && rv.due.length) {
+      banner.style.display = "block";
+      banner.innerHTML = "⏰ <b>" + rv.due.length + " 个知识点到期该复测了：</b>" +
+        rv.due.map(x => esc(x.title)).join("、") + " —— <a href=\"#/review\">去复习</a>";
+    } else { banner.style.display = "none"; }
+  } catch (e) { /* banner is best-effort */ }
   const tip = $("#nextTip"), rec = prof.recommendation || {};
   if (rec.concept_id) {
     tip.style.display = "block";

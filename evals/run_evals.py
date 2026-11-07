@@ -129,6 +129,19 @@ def _run_case(case: dict) -> tuple[bool, str]:
                 return {"correct": False}
             return {"correct": True}
         last = _walk(sid, decide)
+    elif style == "review_queue":
+        _walk(sid, lambda s, q: {"correct": True})
+        from app import review as _review
+
+        card = storage.get_review_card(student, concept)
+        if card is None:
+            return False, "no review card was created after completing the concept"
+        import time as _time
+
+        storage.set_review_card(student, concept, card["card"], _time.time() - 60)
+        due = _review.due_reviews(student)
+        ok = any(d["concept_id"] == concept for d in due)
+        return ok, f"expected {concept} in due queue, got {[d['concept_id'] for d in due]}"
     elif style == "first_wrong_misconception":
         _, q = _current(sid)
         code = next(o["misconception"] for o in q["options"] if o.get("misconception"))
